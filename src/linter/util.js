@@ -1,4 +1,10 @@
-export function error(msg, item, data) {
+import {sep as pathSeparator} from 'path';
+
+export function error(filename, item, data) {
+	let msg = filename.substr(1, filename.length - 4).split(pathSeparator);
+	msg.shift();
+	msg.shift();
+	msg = msg.join('.');
 	item.errors = item.errors || [];
 	item.errors.push({msg, data});
 }

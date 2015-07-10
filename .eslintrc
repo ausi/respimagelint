@@ -3,6 +3,9 @@
   "env": {
     "browser": true
   },
+  "globals": {
+    "__filename": false
+  },
   "rules": {
     "quotes": [2, "single"],
     "comma-dangle": [2, "always-multiline"],
