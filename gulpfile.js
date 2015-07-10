@@ -1,11 +1,33 @@
 /*global require*/
 var gulp = require('gulp');
+var fs = require('fs');
+var path = require('path');
+var glob = require('glob');
 var eslint = require('gulp-eslint');
 var babelify = require('babelify');
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var runSequence = require('run-sequence');
 var livereload = require('gulp-livereload');
+
+gulp.task('docs', function(callback) {
+	glob(__dirname + '/src/linter/**/*.md', function(err, files) {
+		var data = {};
+		files.forEach(function(file) {
+			var key = file.substr(__dirname.length + 1, file.length - 4 - __dirname.length).split(path.sep);
+			key.shift();
+			key.shift();
+			key = key.join('.');
+			data[key] = fs.readFileSync(file, 'utf-8');
+		});
+		data = JSON.stringify(data);
+		if (!fs.existsSync(__dirname + '/tmp')) {
+			fs.mkdir(__dirname + '/tmp');
+		}
+		fs.writeFileSync(__dirname + '/tmp/docs.json', data);
+		callback();
+	});
+});
 
 gulp.task('module:collector', function() {
 	return browserify({
@@ -25,6 +47,7 @@ gulp.task('module:linter', function() {
 		debug: true,
 	})
 		.transform(babelify)
+		.transform('brfs')
 		.bundle()
 		.pipe(source('linter.js'))
 		.pipe(gulp.dest('./dist'))
@@ -38,7 +61,7 @@ gulp.task('lint', function() {
 });
 
 gulp.task('default', function (callback) {
-	return runSequence('lint', ['module:collector', 'module:linter'], callback);
+	return runSequence('lint', 'docs', ['module:collector', 'module:linter'], callback);
 });
 
 gulp.task('watch', ['default'], function() {

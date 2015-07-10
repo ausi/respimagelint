@@ -1,12 +1,14 @@
 import {sep as pathSeparator} from 'path';
 
 export function error(filename, item, data) {
-	let msg = filename.substr(1, filename.length - 4).split(pathSeparator);
-	msg.shift();
-	msg.shift();
-	msg = msg.join('.');
+	let key = filename.substr(1, filename.length - 4).split(pathSeparator);
+	key.shift();
+	key.shift();
+	key = key.join('.');
+	let doc = getDocs(key);
+	let msg = doc.split('\n')[0].substr(2);
 	item.errors = item.errors || [];
-	item.errors.push({msg, data});
+	item.errors.push({key, msg, data});
 }
 
 export function allSources(image) {
@@ -15,4 +17,11 @@ export function allSources(image) {
 		sources.push(image.data.img);
 	}
 	return sources;
+}
+
+/*global require*/
+let docs = JSON.parse(require('fs').readFileSync(__dirname + '/../../tmp/docs.json', 'utf-8'));
+
+export function getDocs(key) {
+	return docs[key];
 }

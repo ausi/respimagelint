@@ -4,7 +4,8 @@
     "browser": true
   },
   "globals": {
-    "__filename": false
+    "__filename": false,
+    "__dirname": false
   },
   "rules": {
     "quotes": [2, "single"],
