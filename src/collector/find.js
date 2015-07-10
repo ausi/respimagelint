@@ -2,7 +2,7 @@ export default function find(document) {
 
 	let images = [];
 
-	Array.from(document.querySelectorAll('img')).map(img => {
+	Array.from(document.querySelectorAll('img')).forEach(img => {
 
 		let image = {
 			dom: {
@@ -28,7 +28,7 @@ export default function find(document) {
 
 	});
 
-	Array.from(document.querySelectorAll('picture')).map(picture => {
+	Array.from(document.querySelectorAll('picture')).forEach(picture => {
 		// Add picture elements with missing img tag
 		if (!picture.querySelector('img')) {
 			images.push({

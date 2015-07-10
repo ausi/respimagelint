@@ -69,7 +69,7 @@ export default function readDimensions(iframe, data) {
 }
 
 function addDimensions(data, width) {
-	data.map(image => addDimension(image, width));
+	data.forEach(image => addDimension(image, width));
 }
 
 function addDimension(image, width) {
