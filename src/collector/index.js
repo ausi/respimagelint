@@ -33,7 +33,13 @@ export default function (document, callback) {
 		return readDimensions(iframe, data);
 
 	}).then(() => {
+
+		data.forEach(image => {
+			delete image.dom;
+		});
+
 		return JSON.parse(JSON.stringify(data));
+
 	});
 
 }
