@@ -1,0 +1,7 @@
+{
+  "parser": false,
+  "env": {
+    "browser": false,
+    "node": true
+  }
+}

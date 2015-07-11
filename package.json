@@ -18,7 +18,8 @@
     "run-sequence": "^1.1.0",
     "gulp-livereload": "^3.8.0",
     "glob": "^5.0.13",
-    "brfs": "^1.4.0"
+    "brfs": "^1.4.0",
+    "require-dir": "^0.3.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
