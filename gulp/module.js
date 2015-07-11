@@ -4,7 +4,7 @@ var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var livereload = require('gulp-livereload');
 
-gulp.task('module:collector', function() {
+gulp.task('module:collector', ['docs'], function() {
 	return browserify({
 		entries: './src/collector.js',
 		debug: true,
@@ -16,7 +16,7 @@ gulp.task('module:collector', function() {
 		.pipe(livereload());
 });
 
-gulp.task('module:linter', function() {
+gulp.task('module:linter', ['docs'], function() {
 	return browserify({
 		entries: './src/linter.js',
 		debug: true,
@@ -27,4 +27,16 @@ gulp.task('module:linter', function() {
 		.pipe(source('linter.js'))
 		.pipe(gulp.dest('./dist'))
 		.pipe(livereload());
+});
+
+gulp.task('module:test', ['docs'], function() {
+	return browserify({
+		entries: './src/test.js',
+		debug: true,
+	})
+		.transform(babelify)
+		.transform('brfs')
+		.bundle()
+		.pipe(source('script.js'))
+		.pipe(gulp.dest('./tmp/test'));
 });

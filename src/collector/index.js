@@ -4,7 +4,7 @@ import readData from './readData';
 import readMarkup from './readMarkup';
 import readDimensions from './readDimensions';
 
-export default function (document, callback) {
+export default function (document, includeDom = false) {
 
 	let iframe, data;
 
@@ -34,11 +34,13 @@ export default function (document, callback) {
 
 	}).then(() => {
 
-		data.forEach(image => {
-			delete image.dom;
-		});
+		if (!includeDom) {
+			data.forEach(image => {
+				delete image.dom;
+			});
+		}
 
-		return JSON.parse(JSON.stringify(data));
+		return data;
 
 	});
 

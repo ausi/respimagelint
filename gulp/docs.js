@@ -8,16 +8,17 @@ gulp.task('docs', function(callback) {
 		if (err) {
 			return;
 		}
+		var rootDir = path.parse(__dirname).dir;
 		var data = {};
 		files.forEach(function(file) {
-			var key = file.substr(__dirname.length + 1, file.length - 4 - __dirname.length).split(path.sep);
+			var key = file.substr(rootDir.length + 1, file.length - 4 - rootDir.length).split(path.sep);
 			key.shift();
 			key.shift();
 			key = key.join('.');
 			data[key] = fs.readFileSync(file, 'utf-8');
 		});
 		data = JSON.stringify(data);
-		var tmpDir = path.join(__dirname, '../tmp');
+		var tmpDir = path.join(rootDir, 'tmp');
 		if (!fs.existsSync(tmpDir)) {
 			fs.mkdir(tmpDir);
 		}
