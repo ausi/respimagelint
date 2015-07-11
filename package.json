@@ -8,20 +8,20 @@
     "gulp-babel": "~5.1.0"
   },
   "devDependencies": {
-    "babelify": "^6.1.2",
-    "browserify": "^10.2.4",
-    "vinyl-source-stream": "^1.1.0",
-    "gulp-eslint": "^0.13.2",
     "babel-eslint": "^3.1.15",
-    "eslint": "^0.22.1",
-    "run-sequence": "^1.1.0",
-    "gulp-livereload": "^3.8.0",
-    "glob": "^5.0.13",
+    "babelify": "^6.1.2",
     "brfs": "^1.4.0",
-    "require-dir": "^0.3.0",
+    "browserify": "^10.2.4",
+    "eslint": "^0.22.1",
+    "glob": "^5.0.13",
+    "gulp-eslint": "^0.13.2",
+    "gulp-livereload": "^3.8.0",
     "gulp-util": "^3.0.6",
     "lwip": "0.0.7",
-    "phantomjs": "^1.9.17"
+    "phantomjs": "^1.9.17",
+    "require-dir": "^0.3.0",
+    "run-sequence": "^1.1.0",
+    "vinyl-source-stream": "^1.1.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
