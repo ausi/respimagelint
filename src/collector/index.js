@@ -3,6 +3,7 @@ import find from './find';
 import readData from './readData';
 import readMarkup from './readMarkup';
 import readDimensions from './readDimensions';
+import readImages from './readImages';
 
 export default function (document, includeDom = false) {
 
@@ -31,6 +32,10 @@ export default function (document, includeDom = false) {
 			.map(readMarkup);
 
 		return readDimensions(iframe, data);
+
+	}).then(() => {
+
+		return readImages(iframe.contentWindow.document, data);
 
 	}).then(() => {
 

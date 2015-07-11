@@ -1,6 +1,6 @@
 import {sep as pathSeparator} from 'path';
 
-export function error(filename, item, data) {
+export function error(filename, item, data = {}) {
 	let key = filename.substr(1, filename.length - 4).split(pathSeparator);
 	key.shift();
 	key.shift();
