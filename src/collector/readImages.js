@@ -113,4 +113,27 @@ function readImage(image) {
 	if (image.type === 'jpg') {
 		image.type = 'jpeg';
 	}
+	image.hash = getImageHash(image.element);
+}
+
+function getImageHash(image) {
+
+	const size = 8;
+	const depth = 16;
+	const canvas = document.createElement('canvas');
+	canvas.width = canvas.height = size;
+	const ctx = canvas.getContext('2d');
+
+	ctx.drawImage(image, 0, 0, size, size);
+	let data;
+	try {
+		data = Array.from(ctx.getImageData(0, 0, size, size).data).reduce(
+			(str, val) => str + Math.floor(val * (depth / 256)).toString(depth),
+			''
+		);
+	}
+	catch (e) {
+		data = false;
+	}
+	return data;
 }

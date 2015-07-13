@@ -5,6 +5,7 @@ var path = require('path');
 var childProcess = require('child_process');
 var phantomjsPath = require('phantomjs').path;
 var lwip = require('lwip');
+var crypto = require('crypto');
 
 gulp.task('test', ['module:test'], function(callback) {
 
@@ -165,11 +166,26 @@ function createImageFiles(tmpDir, html, callback) {
 function createImage(url, tmpDir, callback) {
 
 	var format = url.split('.')[1];
-	var size = url.split('.')[0].split('x').map(function(val) {
+	var name = 'default';
+	var size = url.split('.')[0];
+	if (size.indexOf('-') !== -1) {
+		name = size.split('-')[0];
+		size = size.split('-')[1];
+	}
+	size = size.split('x').map(function(val) {
 		return parseInt(val);
 	});
 
-	lwip.create(size[0], size[1], function(err, image) {
+	var color = '777777';
+	if (name !== 'default') {
+		color = crypto.createHash('md5').update(name).digest('hex').substr(0, 6);
+	}
+
+	lwip.create(size[0], size[1], [
+		parseInt(color.substr(0, 2), 16),
+		parseInt(color.substr(2, 2), 16),
+		parseInt(color.substr(4, 2), 16),
+	], function(err, image) {
 		if (err) {
 			throw err;
 		}
