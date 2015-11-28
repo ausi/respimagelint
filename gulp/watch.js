@@ -1,7 +1,7 @@
-var gulp = require('gulp');
-var livereload = require('gulp-livereload');
+import gulp from 'gulp';
+import livereload from 'gulp-livereload';
 
-gulp.task('watch', ['default'], function() {
+gulp.task('watch', ['default'], () => {
 	livereload.listen();
 	gulp.watch('./src/**/*.js', ['default']);
 });

@@ -1,6 +1,6 @@
-var gulp = require('gulp');
-var runSequence = require('run-sequence');
+import gulp from 'gulp';
+import runSequence from 'run-sequence';
 
-gulp.task('default', function (callback) {
-	return runSequence('lint', ['module:collector', 'module:linter'], callback);
-});
+gulp.task('default', callback =>
+	runSequence('lint', ['module:collector', 'module:linter'], callback)
+);

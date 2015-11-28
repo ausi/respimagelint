@@ -1,26 +1,26 @@
-var gulp = require('gulp');
-var gutil = require('gulp-util');
-var fs = require('fs');
-var path = require('path');
-var childProcess = require('child_process');
-var phantomjsPath = require('phantomjs').path;
-var lwip = require('lwip');
-var crypto = require('crypto');
+import gulp from 'gulp';
+import gutil from 'gulp-util';
+import fs from 'fs';
+import path from 'path';
+import childProcess from 'child_process';
+import phantomjs from 'phantomjs';
+import lwip from 'lwip';
+import crypto from 'crypto';
 
-gulp.task('test', ['module:test'], function(callback) {
+gulp.task('test', ['module:test'], callback => {
 
-	createHtmlFile(function(htmlFile) {
-		var args = [
+	createHtmlFile(htmlFile => {
+		let args = [
 			path.join(__dirname, 'test', 'phantomjs.js'),
 			JSON.stringify({
 				url: 'file://' + htmlFile,
 			}),
 		];
-		childProcess.execFile(phantomjsPath, args, function(err, stdout, stderr) {
+		childProcess.execFile(phantomjs.path, args, (err, stdout, stderr) => {
 			if (err || stderr || !stdout) {
 				throw new Error([err && err.message, stderr, stdout].join('\n'));
 			}
-			var data = JSON.parse(stdout);
+			let data = JSON.parse(stdout);
 			if (!data || !data.length) {
 				throw new Error('Bad output from PhantomJS');
 			}
@@ -33,25 +33,25 @@ gulp.task('test', ['module:test'], function(callback) {
 
 function reviewTestResult(data) {
 
-	var passed = {};
-	var failed = {};
+	let passed = {};
+	let failed = {};
 
-	data.forEach(function(image) {
+	data.forEach(image => {
 
-		var errors = [];
+		let errors = [];
 		if (image.data.img && image.data.img.errors) {
 			errors = errors.concat(image.data.img.errors);
 		}
-		image.data.sources.forEach(function(source) {
+		image.data.sources.forEach(source => {
 			if (source.errors) {
 				errors = errors.concat(source.errors);
 			}
 		});
-		errors = errors.filter(function(error) {
+		errors = errors.filter(error => {
 			return error.key === image.test.key;
 		});
 
-		var key = image.test.key + '.' + image.test.type;
+		let key = image.test.key + '.' + image.test.type;
 
 		if (image.test.type === 'good') {
 			if (errors.length) {
@@ -74,11 +74,11 @@ function reviewTestResult(data) {
 
 	});
 
-	Object.keys(passed).forEach(function(key) {
+	Object.keys(passed).forEach(key => {
 		gutil.log('Test', gutil.colors.cyan(key), gutil.colors.green(passed[key], 'passed'));
 	});
 
-	Object.keys(failed).forEach(function(key) {
+	Object.keys(failed).forEach(key => {
 		gutil.log('Test', gutil.colors.cyan(key), gutil.colors.red(failed[key].length, 'failed'));
 	});
 
@@ -92,19 +92,19 @@ function reviewTestResult(data) {
 
 function createHtmlFile(callback) {
 
-	var tmpDir = path.join(__dirname, '..', 'tmp', 'test');
+	let tmpDir = path.join(__dirname, '..', 'tmp', 'test');
 	if (!fs.existsSync(tmpDir)) {
 		fs.mkdir(tmpDir);
 	}
 
-	var docs = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'tmp', 'docs.json')));
-	var html = '';
+	let docs = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'tmp', 'docs.json')));
+	let html = '';
 
-	html += Object.keys(docs).map(function(key) {
-		var sections = docs[key].split('\n## ');
+	html += Object.keys(docs).map(key => {
+		let sections = docs[key].split('\n## ');
 		sections.shift();
-		return sections.map(function(section) {
-			var testType;
+		return sections.map(section => {
+			let testType;
 			if (section.substr(0, 4) === 'Good') {
 				testType = 'good';
 			}
@@ -114,20 +114,20 @@ function createHtmlFile(callback) {
 			else {
 				return '';
 			}
-			var code = section.split('\n```html\n');
+			let code = section.split('\n```html\n');
 			code.shift();
-			code = code.map(function(block) {
-				return '<div data-test-key="' + key + '" data-test-type="' + testType + '">\n'
-					+ block.split('\n```\n')[0]
-					+ '\n</div>\n';
-			});
+			code = code.map(block =>
+				'<div data-test-key="' + key + '" data-test-type="' + testType + '">\n'
+				+ block.split('\n```\n')[0]
+				+ '\n</div>\n'
+			);
 			return code.join('');
 		}).join('');
 	}).join('');
 
 	fs.writeFileSync(path.join(tmpDir, 'index.html'), html);
 
-	createImageFiles(tmpDir, html, function() {
+	createImageFiles(tmpDir, html, () => {
 		callback(path.join(tmpDir, 'index.html'));
 	});
 
@@ -135,25 +135,23 @@ function createHtmlFile(callback) {
 
 function createImageFiles(tmpDir, html, callback) {
 
-	var images = [];
+	let images = [];
 
-	regExpMatchAll(/src(?:set)="([^"]+)"/g, html).forEach(function(match) {
-		var urls = match[1].split(/[\s,]+/);
-		urls.forEach(function(url) {
+	regExpMatchAll(/src(?:set)="([^"]+)"/g, html).forEach(match => {
+		let urls = match[1].split(/[\s,]+/);
+		urls.forEach(url => {
 			if (url.match(/.+\.jpg/)) {
 				images.push(url);
 			}
 		});
 	});
 
-	images = images.filter(function(url, index) {
-		return images.indexOf(url) === index;
-	});
+	images = images.filter((url, index) => images.indexOf(url) === index);
 
-	var imagesCreated = 0;
+	let imagesCreated = 0;
 
-	images.forEach(function(url) {
-		createImage(url, tmpDir, function() {
+	images.forEach(url => {
+		createImage(url, tmpDir, () => {
 			imagesCreated++;
 			if (imagesCreated === images.length) {
 				callback();
@@ -165,18 +163,16 @@ function createImageFiles(tmpDir, html, callback) {
 
 function createImage(url, tmpDir, callback) {
 
-	var format = url.split('.')[1];
-	var name = 'default';
-	var size = url.split('.')[0];
+	let format = url.split('.')[1];
+	let name = 'default';
+	let size = url.split('.')[0];
 	if (size.indexOf('-') !== -1) {
 		name = size.split('-')[0];
 		size = size.split('-')[1];
 	}
-	size = size.split('x').map(function(val) {
-		return parseInt(val);
-	});
+	size = size.split('x').map(val => parseInt(val));
 
-	var color = '777777';
+	let color = '777777';
 	if (name !== 'default') {
 		color = crypto.createHash('md5').update(name).digest('hex').substr(0, 6);
 	}
@@ -185,11 +181,11 @@ function createImage(url, tmpDir, callback) {
 		parseInt(color.substr(0, 2), 16),
 		parseInt(color.substr(2, 2), 16),
 		parseInt(color.substr(4, 2), 16),
-	], function(err, image) {
+	], (err, image) => {
 		if (err) {
 			throw err;
 		}
-		image.writeFile(path.join(tmpDir, url), format, function(err2) {
+		image.writeFile(path.join(tmpDir, url), format, err2 => {
 			if (err2) {
 				throw err2;
 			}
@@ -202,8 +198,8 @@ function regExpMatchAll(regexp, str) {
 	if (!regexp.global) {
 		throw new Error('Regular expression is missing the global flag.');
 	}
-	var matches = [];
-	var match;
+	let matches = [];
+	let match;
 	while ((match = regexp.exec(str)) !== null) {
 		matches.push(match);
 	}

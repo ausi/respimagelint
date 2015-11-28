@@ -1,13 +1,11 @@
-var gulp = require('gulp');
-var babelify = require('babelify').configure({
-	presets: ['es2015'],
-});
-var browserify = require('browserify');
-var source = require('vinyl-source-stream');
-var livereload = require('gulp-livereload');
+import gulp from 'gulp';
+import babelify from 'babelify';
+import browserify from 'browserify';
+import source from 'vinyl-source-stream';
+import livereload from 'gulp-livereload';
 
-gulp.task('module:collector', ['docs'], function() {
-	return browserify({
+gulp.task('module:collector', ['docs'], () =>
+	browserify({
 		entries: './src/collector.js',
 		debug: true,
 	})
@@ -15,11 +13,11 @@ gulp.task('module:collector', ['docs'], function() {
 		.bundle()
 		.pipe(source('collector.js'))
 		.pipe(gulp.dest('./dist'))
-		.pipe(livereload());
-});
+		.pipe(livereload())
+);
 
-gulp.task('module:linter', ['docs'], function() {
-	return browserify({
+gulp.task('module:linter', ['docs'], () =>
+	browserify({
 		entries: './src/linter.js',
 		debug: true,
 	})
@@ -28,11 +26,11 @@ gulp.task('module:linter', ['docs'], function() {
 		.bundle()
 		.pipe(source('linter.js'))
 		.pipe(gulp.dest('./dist'))
-		.pipe(livereload());
-});
+		.pipe(livereload())
+);
 
-gulp.task('module:test', ['docs'], function() {
-	return browserify({
+gulp.task('module:test', ['docs'], () =>
+	browserify({
 		entries: './src/test.js',
 		debug: true,
 	})
@@ -40,5 +38,5 @@ gulp.task('module:test', ['docs'], function() {
 		.transform('brfs')
 		.bundle()
 		.pipe(source('script.js'))
-		.pipe(gulp.dest('./tmp/test'));
-});
+		.pipe(gulp.dest('./tmp/test'))
+);
