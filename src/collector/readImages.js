@@ -124,9 +124,9 @@ function getImageHash(image) {
 	canvas.width = canvas.height = size;
 	const ctx = canvas.getContext('2d');
 
-	ctx.drawImage(image, 0, 0, size, size);
 	let data;
 	try {
+		ctx.drawImage(image, 0, 0, size, size);
 		data = Array.from(ctx.getImageData(0, 0, size, size).data).reduce(
 			(str, val) => str + Math.floor(val * (depth / 256)).toString(depth),
 			''
