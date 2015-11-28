@@ -1,4 +1,4 @@
-import 'babelify/polyfill';
+import 'babel-polyfill';
 import find from './find';
 import readData from './readData';
 import readMarkup from './readMarkup';

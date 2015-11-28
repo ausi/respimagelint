@@ -1,5 +1,7 @@
 var gulp = require('gulp');
-var babelify = require('babelify');
+var babelify = require('babelify').configure({
+	presets: ['es2015'],
+});
 var browserify = require('browserify');
 var source = require('vinyl-source-stream');
 var livereload = require('gulp-livereload');
