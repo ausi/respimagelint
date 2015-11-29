@@ -10,6 +10,8 @@ export default function(item) {
 			(a, b) => a === b ? a : false
 		) === false
 	) {
-		error(__filename, item, descriptors);
+		error(__filename, item, {
+			descriptors: descriptors.join(', '),
+		});
 	}
 }

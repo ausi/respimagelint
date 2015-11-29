@@ -8,6 +8,7 @@ export default function(item, images) {
 		sources.push(item.src);
 	}
 	item.srcset.forEach(({src}) => sources.push(src));
+	const errorImages = {};
 	sources.forEach(src => {
 		if (!images[src].size.width || !images[src].size.height) {
 			return;
@@ -17,6 +18,8 @@ export default function(item, images) {
 				src2 === src
 				|| !images[src2].size.width
 				|| !images[src2].size.height
+				|| errorImages[src]
+				|| errorImages[src2]
 			) {
 				return;
 			}
@@ -26,7 +29,18 @@ export default function(item, images) {
 				(srcW < images[src].size.width * (1 - threshold) || srcW > images[src].size.width * (1 + threshold))
 				&& (src2W < images[src2].size.width * (1 - threshold) || src2W > images[src2].size.width * (1 + threshold))
 			) {
-				error(__filename, item, [src, src2, images[src].size, images[src2].size]);
+				error(__filename, item, {
+					image1: src,
+					ratio1: Math.round(100 / images[src].size.width * images[src].size.height) + '%',
+					width1: images[src].size.width,
+					height1: images[src].size.height,
+					image2: src2,
+					ratio2: Math.round(100 / images[src2].size.width * images[src2].size.height) + '%',
+					width2: images[src2].size.width,
+					height2: images[src2].size.height,
+				});
+				errorImages[src] = true;
+				errorImages[src2] = true;
 			}
 		});
 	});

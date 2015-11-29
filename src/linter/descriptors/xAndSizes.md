@@ -12,3 +12,7 @@
 ```html
 <img sizes="100vw" srcset="200x100.jpg 1x">
 ```
+
+## Error template
+
+X descriptor `{{descriptor}}` is used but the `sizes` attribute is set.

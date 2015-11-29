@@ -1,3 +1,5 @@
+import {getDocs} from './linter/util';
+
 export default function (data) {
 
 	let report = document.createElement('div');
@@ -110,9 +112,29 @@ function buildError(key, errors) {
 	headline.textContent = errors[0].msg;
 	element.appendChild(headline);
 
-	let details = document.createElement('pre');
-	details.textContent = JSON.stringify(errors.map(({data}) => data), undefined, 2);
-	element.appendChild(details);
+	let message = document.createElement('div');
+	errors.forEach(({key, data}) => message.appendChild(buildErrorMessage(key, data)));
+	element.appendChild(message);
+
+	let text = document.createElement('div');
+	text.textContent = getDocs(key, 'text');
+	element.appendChild(text);
+
+	return element;
+
+}
+
+function buildErrorMessage(key, data) {
+
+	let element = document.createElement('div');
+
+	let message = getDocs(key, 'Error template');
+
+	Object.keys(data).forEach(key => {
+		message = message.split('{{' + key + '}}').join(data[key]);
+	});
+
+	element.textContent = message;
 
 	return element;
 

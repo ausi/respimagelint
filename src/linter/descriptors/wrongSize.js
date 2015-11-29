@@ -8,7 +8,11 @@ export default function(item, images) {
 			&& images[src].size.width
 			&& parseInt(descriptor) !== images[src].size.width
 		) {
-			error(__filename, item, [descriptor, images[src].size.width]);
+			error(__filename, item, {
+				descriptor,
+				width: images[src].size.width,
+				image: src,
+			});
 		}
 	});
 }

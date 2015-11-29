@@ -13,3 +13,7 @@
 <img srcset="200x100.jpg 1x, 400x200.jpg 400w">
 <img srcset="200x100.jpg, 400x200.jpg 400w">
 ```
+
+## Error template
+
+X and W descriptors are mixed: `{{descriptors}}`.

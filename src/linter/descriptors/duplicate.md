@@ -14,3 +14,7 @@
 <img srcset="200x100.jpg 1x, 400x200.jpg 1x">
 <img srcset="200x100.jpg 200w, 400x200.jpg 200w">
 ```
+
+## Error template
+
+The descriptor {{descriptor}} appears twice in the same `srcset` attribute (*{{image1}}* and *{{image2}}*).
