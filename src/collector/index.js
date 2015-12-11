@@ -4,18 +4,31 @@ import readData from './readData';
 import readMarkup from './readMarkup';
 import readDimensions from './readDimensions';
 import readImages from './readImages';
+import {setStyles} from './util';
 
 export default function (document, includeDom = false) {
 
-	let iframe, data;
+	let iframe, data, progressBar, overlay;
+
+	function progress(done) {
+		progressBar.value = done;
+		setStyles(overlay, {opacity: done * 0.5 + 0.5});
+	}
 
 	return Promise.resolve().then(() => {
 
+		setStyles(document.body, {overflow: 'hidden'});
+		setStyles(document.documentElement, {overflow: 'hidden'});
+
 		iframe = document.createElement('iframe');
 		iframe.src = document.location.href + (document.location.search ? '&' : '?');
-		iframe.style.position = 'absolute';
-		iframe.style.top = 0;
-		iframe.style.left = 0;
+		setStyles(iframe, {
+			position: 'absolute',
+			top: 0,
+			left: 0,
+			opacity: 0,
+			'z-index': 2147483647,
+		});
 
 		let promise = new Promise(resolve => {
 			iframe.addEventListener('load', resolve);
@@ -23,21 +36,60 @@ export default function (document, includeDom = false) {
 
 		document.body.appendChild(iframe);
 
+		overlay = document.createElement('div');
+		document.body.appendChild(overlay);
+		setStyles(overlay, {
+			position: 'fixed',
+			top: 0,
+			left: 0,
+			right: 0,
+			bottom: 0,
+			'background-color': 'rgba(255, 255, 255, 0)',
+			opacity: 0.5,
+			'z-index': 2147483647,
+			transition: 'background-color 1s linear',
+		});
+		overlay.offsetWidth; // force layout
+		setStyles(overlay, {'background-color': '#fff'});
+
+		progressBar = document.createElement('progress');
+		setStyles(progressBar, {
+			position: 'fixed',
+			top: '50%',
+			left: '50%',
+			transform: 'translate(-50%, -50%)',
+			width: '33%',
+			'z-index': 2147483647,
+		});
+		document.body.appendChild(progressBar);
+
+		progress(0.05);
+
 		return promise;
 
 	}).then(() => {
+
+		progress(0.1);
 
 		data = find(iframe.contentWindow.document)
 			.map(readData)
 			.map(readMarkup);
 
-		return readDimensions(iframe, data);
+		return readDimensions(iframe, data, progressDone => {
+			progress(0.1 + (0.8 * progressDone));
+		});
 
 	}).then(() => {
 
-		return readImages(iframe.contentWindow.document, data);
+		progress(0.9);
+
+		return readImages(iframe.contentWindow.document, data, progressDone => {
+			progress(0.9 + (0.1 * progressDone));
+		});
 
 	}).then(() => {
+
+		progress(1);
 
 		if (!includeDom) {
 			data.forEach(image => {

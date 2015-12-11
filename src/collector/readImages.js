@@ -1,4 +1,4 @@
-export default function readImages(document, data) {
+export default function readImages(document, data, progress) {
 
 	return new Promise(resolve => {
 
@@ -36,6 +36,11 @@ export default function readImages(document, data) {
 
 		function step(startTime = Date.now()) {
 
+			progress(Object.keys(images).reduce(
+				(count, key) => count + (images[key].element ? 0 : 1),
+				0
+			) / Object.keys(images).length);
+
 			let currentImage;
 
 			Object.keys(images).forEach(key => {
@@ -50,6 +55,7 @@ export default function readImages(document, data) {
 			}
 
 			if (Object.keys(images).reduce((done, key) => done && !images[key].element, true)) {
+				progress(1);
 				finish();
 				return;
 			}
@@ -59,8 +65,8 @@ export default function readImages(document, data) {
 				return;
 			}
 
-			// Don’t force the main thread to go under 10 fps
-			if (Date.now() - startTime > 1000 / 10) {
+			// Don’t force the main thread to go under 30 fps
+			if (Date.now() - startTime > 1000 / 30) {
 				setTimeout(step, 0);
 				return;
 			}

@@ -1,27 +1,43 @@
-export default function readDimensions(iframe, data) {
+import {setStyles} from './util';
+
+const minWidth = 300;
+const maxWidth = 4000;
+const stepSize = 10;
+
+export default function readDimensions(iframe, data, progress) {
 
 	return new Promise((resolve) => {
 
-		let width = 300;
-		iframe.width = width;
-		iframe.height = '100%';
-		iframe.frameBorder = 0;
-		iframe.contentWindow.document.documentElement.style.overflow = 'hidden';
-		iframe.contentWindow.document.body.style.overflow = 'hidden';
+		let width = minWidth;
+		setStyles(iframe, {
+			width: width + 'px',
+			'max-width': 'none',
+			'min-width': 0,
+			height: '100vh',
+			'max-height': 'none',
+			'min-height': 0,
+			border: 0,
+		});
+		setStyles(iframe.contentWindow.document.documentElement, {overflow: 'hidden'});
+		setStyles(iframe.contentWindow.document.body, {overflow: 'hidden'});
+
 		var referenceElement = iframe.contentWindow.document.createElement('img');
 		if ('sizes' in referenceElement) {
 			referenceElement.srcset = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7 1w';
 			referenceElement.sizes = '100vw';
-			let styles = {
+			setStyles(referenceElement, {
 				position: 'absolute',
 				top: 0,
 				left: 0,
 				width: 'auto',
+				'max-width': 'none',
+				'min-width': 0,
 				height: 'auto',
-			};
-			for (let prop in styles) {
-				referenceElement.style.setProperty(prop, styles[prop], 'important');
-			}
+				'max-height': 'none',
+				'min-height': 0,
+				border: 0,
+				padding: 0,
+			});
 			iframe.contentWindow.document.body.appendChild(referenceElement);
 		}
 		else {
@@ -29,6 +45,8 @@ export default function readDimensions(iframe, data) {
 		}
 
 		function resizeStep(startTime = Date.now()) {
+
+			progress((width - minWidth) / (maxWidth - minWidth));
 
 			// Chrome (43) needs some time to update image sizes based on the sizes attribute
 			if (referenceElement && imageWidth(referenceElement) !== width) {
@@ -46,15 +64,16 @@ export default function readDimensions(iframe, data) {
 			}
 
 			addDimensions(data, width);
-			width += 10;
-			if (width > 4000) {
+			width += stepSize;
+			if (width > maxWidth) {
+				progress(1);
 				resolve();
 				return;
 			}
-			iframe.width = width;
+			setStyles(iframe, {width: width + 'px'});
 
-			// Don’t force the main thread to go under 10 fps
-			if (Date.now() - startTime > 1000 / 10) {
+			// Don’t force the main thread to go under 30 fps
+			if (Date.now() - startTime > 1000 / 30) {
 				setTimeout(resizeStep, 0);
 				return;
 			}
