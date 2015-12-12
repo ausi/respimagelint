@@ -50,7 +50,7 @@ function reviewTestResult(data) {
 				errors = errors.concat(source.errors);
 			}
 		});
-		errors = errors.filter(error => {
+		let filteredErrors = errors.filter(error => {
 			return error.key === image.test.key;
 		});
 
@@ -66,7 +66,7 @@ function reviewTestResult(data) {
 			}
 		}
 		else {
-			if (!errors.length) {
+			if (!filteredErrors.length) {
 				failed[key] = failed[key] || [];
 				failed[key].push(image.data);
 			}

@@ -5,15 +5,15 @@ The syntax of the descriptors is defined in the [spec](https://html.spec.whatwg.
 ## Good
 
 ```html
-<img srcset="200x100.jpg 1x">
-<img srcset="200x100.jpg 200w">
+<img src="200x100.jpg" srcset="200x100.jpg 1x">
+<img src="200x100.jpg" srcset="200x100.jpg 200w">
 ```
 
 ## Bad
 
 ```html
-<img srcset="200x100.jpg 1a">
-<img srcset="200x100.jpg 100h">
+<img src="200x100.jpg" srcset="200x100.jpg 1a">
+<img src="200x100.jpg" srcset="200x100.jpg 100h">
 ```
 
 ## Error template
