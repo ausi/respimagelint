@@ -1,5 +1,6 @@
 import marked from 'marked';
 import getDocs from './util/getDocs';
+import allSources from './util/allSources';
 
 export default function (data) {
 
@@ -25,6 +26,22 @@ function reportImage(image, index) {
 	let headline = document.createElement('h2');
 	headline.textContent = 'Image #' + (index + 1);
 	report.appendChild(headline);
+
+	let img = document.createElement('img');
+	img.src = image.data.img
+		&& image.images[image.data.img.src]
+		&& image.images[image.data.img.src].url
+		|| allSources(image).reverse().reduce(
+		(result, source) => result || source.srcset.reduce(
+			(url, srcset) => url || (
+				image.images[srcset.src]
+				&& image.images[srcset.src].url
+			),
+			false
+		),
+		false
+	);
+	report.appendChild(img);
 
 	let markup = document.createElement('pre');
 	markup.textContent = buildMarkup(image.markup);
