@@ -1,4 +1,4 @@
-import {error} from '../util';
+import error from '../../util/error';
 
 export default function(item) {
 	item.srcset.forEach(({descriptor}) => {

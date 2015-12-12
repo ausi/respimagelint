@@ -1,4 +1,4 @@
-import {error} from '../util';
+import error from '../../util/error';
 
 const threshold = 0.02;
 

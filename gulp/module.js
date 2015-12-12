@@ -10,6 +10,7 @@ gulp.task('module:collector', ['docs'], () =>
 		debug: true,
 	})
 		.transform(babelify)
+		.transform('brfs')
 		.bundle()
 		.pipe(source('collector.js'))
 		.pipe(gulp.dest('./dist'))
@@ -35,6 +36,7 @@ gulp.task('module:store', () =>
 		debug: true,
 	})
 		.transform(babelify)
+		.transform('brfs')
 		.bundle()
 		.pipe(source('store.js'))
 		.pipe(gulp.dest('./dist'))

@@ -1,4 +1,4 @@
-import {allSources} from '../util';
+import allSources from '../../util/allSources';
 import duplicate from './duplicate';
 import malformed from './malformed';
 import mixed from './mixed';

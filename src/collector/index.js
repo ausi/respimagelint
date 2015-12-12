@@ -4,7 +4,7 @@ import readData from './readData';
 import readMarkup from './readMarkup';
 import readDimensions from './readDimensions';
 import readImages from './readImages';
-import {setStyles} from './util';
+import setStyles from '../util/setStyles';
 
 export default function (document, includeDom = false) {
 

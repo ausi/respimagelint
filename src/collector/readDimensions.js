@@ -1,4 +1,4 @@
-import {setStyles} from './util';
+import setStyles from '../util/setStyles';
 
 const minWidth = 300;
 const maxWidth = 4000;

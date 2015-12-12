@@ -1,5 +1,5 @@
 import marked from 'marked';
-import {getDocs} from './linter/util';
+import getDocs from './util/getDocs';
 
 export default function (data) {
 
