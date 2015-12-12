@@ -17,4 +17,4 @@
 
 ## Error template
 
-The descriptor {{descriptor}} appears twice in the same `srcset` attribute (*{{image1}}* and *{{image2}}*).
+The descriptor {{descriptor}} appears twice in the same `srcset` attribute ([{{image1}}]({{image1Url}}) and [{{image2}}]({{image2Url}})).

@@ -32,12 +32,8 @@ export default function(item, images) {
 				error(__filename, item, {
 					image1: src,
 					ratio1: Math.round(100 / images[src].size.width * images[src].size.height) + '%',
-					width1: images[src].size.width,
-					height1: images[src].size.height,
 					image2: src2,
 					ratio2: Math.round(100 / images[src2].size.width * images[src2].size.height) + '%',
-					width2: images[src2].size.width,
-					height2: images[src2].size.height,
 				});
 				errorImages[src] = true;
 				errorImages[src2] = true;

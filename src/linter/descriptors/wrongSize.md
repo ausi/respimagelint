@@ -14,4 +14,4 @@
 
 ## Error template
 
-Descriptor `{{descriptor}}` doesn’t match the image width of {{width}} from *{{image}}*.
+Descriptor `{{descriptor}}` doesn’t match the image width of {{imageWidth}} from [{{image}}]({{imageUrl}}).

@@ -10,7 +10,6 @@ export default function(item, images) {
 		) {
 			error(__filename, item, {
 				descriptor,
-				width: images[src].size.width,
 				image: src,
 			});
 		}

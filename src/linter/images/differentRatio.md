@@ -16,4 +16,4 @@ The `srcset` attribute isn’t for art direction, so the images must therefore o
 
 ## Error template
 
-The image *{{image1}}* has an aspect ratio of {{ratio1}} ({{width1}}x{{height1}}) but the ratio of *{{image2}}* is {{ratio2}} ({{width2}}x{{height2}}).
+The image [{{image1}}]({{image1Url}}) has an aspect ratio of {{ratio1}} ({{image1Width}}x{{image1Height}}) but the ratio of [{{image2}}]({{image2Url}}) is {{ratio2}} ({{image2Width}}x{{image2Height}}).

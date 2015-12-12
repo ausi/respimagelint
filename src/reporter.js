@@ -47,7 +47,7 @@ function reportImage(image, index) {
 	markup.textContent = buildMarkup(image.markup);
 	report.appendChild(markup);
 
-	let errors = buildErrors(image.data);
+	let errors = buildErrors(image.data, image.images);
 
 	if (errors.length) {
 		errors.forEach(error => report.appendChild(error));
@@ -104,7 +104,7 @@ function buildMarkup(markup, indentation = '', maxlength = 80) {
 
 }
 
-function buildErrors(data) {
+function buildErrors(data, images) {
 	let errors = {};
 
 	if (data.img && data.img.errors) {
@@ -123,10 +123,10 @@ function buildErrors(data) {
 		}
 	});
 
-	return Object.keys(errors).map(key => buildError(key, errors[key]));
+	return Object.keys(errors).map(key => buildError(key, errors[key], images));
 }
 
-function buildError(key, errors) {
+function buildError(key, errors, images) {
 
 	let element = document.createElement('div');
 
@@ -135,7 +135,7 @@ function buildError(key, errors) {
 	element.appendChild(headline);
 
 	let message = document.createElement('div');
-	errors.forEach(({key, data}) => message.appendChild(buildErrorMessage(key, data)));
+	errors.forEach(({key, data}) => message.appendChild(buildErrorMessage(key, data, images)));
 	element.appendChild(message);
 
 	let text = document.createElement('div');
@@ -146,11 +146,20 @@ function buildError(key, errors) {
 
 }
 
-function buildErrorMessage(key, data) {
+function buildErrorMessage(key, data, images) {
 
 	let element = document.createElement('div');
 
 	let message = getDocs(key, 'Error template');
+
+	Object.keys(data).forEach(key => {
+		if (images[data[key]]) {
+			data[key + 'Url'] = images[data[key]].url;
+			data[key + 'Type'] = images[data[key]].type;
+			data[key + 'Width'] = images[data[key]].size.width;
+			data[key + 'Height'] = images[data[key]].size.height;
+		}
+	});
 
 	Object.keys(data).forEach(key => {
 		message = message.split('{{' + key + '}}').join(data[key]);

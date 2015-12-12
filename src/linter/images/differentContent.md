@@ -16,4 +16,4 @@ The `srcset` attribute isn’t for art direction, so the images must therefore o
 
 ## Error template
 
-It seems the image *{{image1}}* doesn’t show the same contents as *{{image2}}* does, the determined difference is {{distance}}.
+It seems the image [{{image1}}]({{image1Url}}) doesn’t show the same contents as [{{image2}}]({{image2Url}}) does, the determined difference is {{distance}}.
