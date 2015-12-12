@@ -29,6 +29,18 @@ gulp.task('module:linter', ['docs'], () =>
 		.pipe(livereload())
 );
 
+gulp.task('module:store', () =>
+	browserify({
+		entries: './src/store.js',
+		debug: true,
+	})
+		.transform(babelify)
+		.bundle()
+		.pipe(source('store.js'))
+		.pipe(gulp.dest('./dist'))
+		.pipe(livereload())
+);
+
 gulp.task('module:test', ['docs'], () =>
 	browserify({
 		entries: './src/test.js',

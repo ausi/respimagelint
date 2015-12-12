@@ -3,5 +3,6 @@ import livereload from 'gulp-livereload';
 
 gulp.task('watch', ['default'], () => {
 	livereload.listen();
-	gulp.watch('./src/**/*.js', ['default']);
+	gulp.watch('./src/**/*.*', ['default']);
+	gulp.watch('./pages/**/*.*', ['pages']);
 });

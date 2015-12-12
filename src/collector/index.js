@@ -13,6 +13,7 @@ export default function (document, includeDom = false) {
 	function progress(done) {
 		progressBar.value = done;
 		setStyles(overlay, {opacity: done * 0.5 + 0.5});
+		document.title = Math.round(done * 100) + '% collecting data...';
 	}
 
 	return Promise.resolve().then(() => {

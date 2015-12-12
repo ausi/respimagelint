@@ -4,7 +4,11 @@ export default function (data) {
 
 	let report = document.createElement('div');
 
-	data.map((image, index) => reportImage(image, index))
+	let headline = document.createElement('h1');
+	headline.textContent = 'Report for ' + data.href;
+	report.appendChild(headline);
+
+	data.data.map((image, index) => reportImage(image, index))
 		.forEach(imageReport => {
 			report.appendChild(imageReport)
 		});

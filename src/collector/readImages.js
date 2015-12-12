@@ -39,7 +39,7 @@ export default function readImages(document, data, progress) {
 			progress(Object.keys(images).reduce(
 				(count, key) => count + (images[key].element ? 0 : 1),
 				0
-			) / Object.keys(images).length);
+			) / (Object.keys(images).length || 1));
 
 			let currentImage;
 

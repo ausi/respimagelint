@@ -1,14 +1,32 @@
 import collector from './collector/index';
 
+const script = document.getElementById('respimagelint-script');
+const scriptHost = script.src.split('/', 3).join('/');
+
 collector(document).then(data => {
 
-	window.RespImageLintData = data;
+	data = {
+		href: document.location.href,
+		data,
+	};
 
-	//console.log(JSON.stringify(window.RespImageLintData, undefined, 2));
+	return new Promise(resolve => {
 
-	let linterScript = document.createElement('script');
-	linterScript.type = 'text/javascript';
-	linterScript.src = 'http://respimagelint.127.0.0.1.xip.io/dist/linter.js';
-	document.body.appendChild(linterScript);
+		window.addEventListener('message', function(event) {
+			if (event.data === 'respImageLintStoreReady') {
+				event.source.postMessage(JSON.stringify(data), '*');
+			}
+			if (event.data === 'respImageLintStoreDone') {
+				resolve();
+			}
+		});
 
+		let store = document.createElement('iframe');
+		store.src = scriptHost + '/dist/store.html';
+		document.body.appendChild(store);
+
+	});
+
+}).then(() => {
+	document.location.href = scriptHost + '/dist/linter.html';
 });
