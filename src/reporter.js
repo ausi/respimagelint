@@ -5,6 +5,7 @@ import allSources from './util/allSources';
 export default function (data) {
 
 	let report = document.createElement('div');
+	report.className = 'report';
 
 	let headline = document.createElement('h1');
 	headline.textContent = 'Report for ' + data.href;
@@ -22,10 +23,10 @@ export default function (data) {
 function reportImage(image, index) {
 
 	let report = document.createElement('div');
+	report.className = 'report-item';
 
-	let headline = document.createElement('h2');
-	headline.textContent = 'Image #' + (index + 1);
-	report.appendChild(headline);
+	let header = document.createElement('header');
+	header.className = 'report-item-header';
 
 	let img = document.createElement('img');
 	img.src = image.data.img
@@ -41,21 +42,30 @@ function reportImage(image, index) {
 		),
 		false
 	);
-	report.appendChild(img);
+	header.appendChild(img);
 
-	let markup = document.createElement('pre');
-	markup.textContent = buildMarkup(image.markup);
-	report.appendChild(markup);
+	let headline = document.createElement('h2');
+	headline.textContent = 'Image #' + (index + 1);
+	header.appendChild(headline);
+
+	report.appendChild(header);
 
 	let errors = buildErrors(image.data, image.images);
 
 	if (errors.length) {
+
 		errors.forEach(error => report.appendChild(error));
+
+		let markup = document.createElement('pre');
+		markup.textContent = buildMarkup(image.markup);
+		report.appendChild(markup);
+
 	}
 	else {
-		let info = document.createElement('div');
+		let info = document.createElement('p');
 		info.textContent = 'All checks passed.';
 		report.appendChild(info);
+		report.className += ' -passed';
 	}
 
 	return report;
