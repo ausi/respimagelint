@@ -1,3 +1,4 @@
+import marked from 'marked';
 import {getDocs} from './linter/util';
 
 export default function (data) {
@@ -21,7 +22,7 @@ function reportImage(image, index) {
 
 	let report = document.createElement('div');
 
-	let headline = document.createElement('h1');
+	let headline = document.createElement('h2');
 	headline.textContent = 'Image #' + (index + 1);
 	report.appendChild(headline);
 
@@ -112,8 +113,8 @@ function buildError(key, errors) {
 
 	let element = document.createElement('div');
 
-	let headline = document.createElement('h1');
-	headline.textContent = errors[0].msg;
+	let headline = document.createElement('h3');
+	headline.innerHTML = marked(errors[0].msg).replace(/<\/?p>/gi, '');
 	element.appendChild(headline);
 
 	let message = document.createElement('div');
@@ -121,7 +122,7 @@ function buildError(key, errors) {
 	element.appendChild(message);
 
 	let text = document.createElement('div');
-	text.textContent = getDocs(key, 'text');
+	text.innerHTML = marked(getDocs(key, 'text'));
 	element.appendChild(text);
 
 	return element;
@@ -138,7 +139,7 @@ function buildErrorMessage(key, data) {
 		message = message.split('{{' + key + '}}').join(data[key]);
 	});
 
-	element.textContent = message;
+	element.innerHTML = marked(message);
 
 	return element;
 
