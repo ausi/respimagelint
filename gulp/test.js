@@ -39,6 +39,9 @@ function reviewTestResult(data) {
 	data.forEach(image => {
 
 		let errors = [];
+		if (image.data.errors) {
+			errors = errors.concat(image.data.errors);
+		}
 		if (image.data.img && image.data.img.errors) {
 			errors = errors.concat(image.data.img.errors);
 		}

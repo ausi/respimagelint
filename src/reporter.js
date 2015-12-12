@@ -117,6 +117,13 @@ function buildMarkup(markup, indentation = '', maxlength = 80) {
 function buildErrors(data, images) {
 	let errors = {};
 
+	if (data.errors) {
+		data.errors.forEach(error => {
+			errors[error.key] = errors[error.key] || [];
+			errors[error.key].push(error);
+		});
+	}
+
 	if (data.img && data.img.errors) {
 		data.img.errors.forEach(error => {
 			errors[error.key] = errors[error.key] || [];
