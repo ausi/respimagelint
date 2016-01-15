@@ -1,0 +1,67 @@
+$text-color: black
+$link-color: #2D7AB3
+$link-visited-color: #882DB3
+$background-color: white
+$border-color: #CCCCCC
+$red: crimson
+$green: seagreen
+
+html
+	box-sizing: border-box
+	tab-size: 4
+	font: 87.5%/1.5 sans-serif
+	letter-spacing: 0.02em
+	color: $text-color
+	@media (min-width: 600px)
+		font-size: 100%
+	@media (min-width: 800px)
+		font-size: 112.5%
+	@media (min-width: 1000px)
+		font-size: 125%
+
+*, *:before, *:after
+	box-sizing: inherit
+
+h1, h2, h3, h4, h5, h6
+	margin: 1.5em 0 0.5em
+	font-family: Georgia, serif
+
+h1, h2
+	line-height: 1.2
+
+h1
+	font-size: 1.75em
+
+h2
+	font-size: 1.5em
+
+h3
+	font-size: 1.1em
+
+p
+	margin: 0.5em 0
+
+a
+	color: $link-color
+	text-decoration: none
+	&:visited
+		color: $link-visited-color
+	&:hover, &:focus
+		color: $link-color
+		text-decoration: underline
+
+pre, code
+	border-radius: 0.2em
+	color: $background-color
+	background: $text-color
+
+code
+	padding: 0.1em 0.3em
+	font-size: 0.9em
+
+pre
+	margin: 2em 0
+	padding: 0.5em 0.75em
+	-webkit-overflow-scrolling: touch
+	> code
+		padding: 0

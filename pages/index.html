@@ -1,0 +1,26 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>RespImageLint</title>
+<link rel="stylesheet" href="index.css">
+<body>
+
+<div class="page">
+
+	<h1>RespImageLint - Linter for Responsive Images</h1>
+
+ 	<p>RespImageLint is a bookmarklet that checks images of a webpage against a list of common mistakes and best practises. Just run the bookmarklet and see if it detects any mistakes with your images. You can find more information on the <a href="https://github.com/ausi/RespImageLint">Project page on Github</a>.</p>
+
+	<div class="bookmarklet">
+		<a
+			class="bookmarklet-link"
+			href="javascript:(function(s){s.id='respimagelint-script';s.type='text/javascript';s.src='https://ausi.github.io/respimagelint/collector.js?'+Date.now();document.body.appendChild(s)})(document.createElement('script'))"
+			onclick="alert(this.nextElementSibling.textContent); return false;"
+		>
+			Lint Images
+		</a>
+		<p class="bookmarklet-desc">
+			Drag this link to your bookmarks or right click and bookmark it.
+		</p>
+	</div>
+
+</div>

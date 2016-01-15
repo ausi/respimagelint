@@ -1,0 +1,26 @@
+@import "_normalize"
+@import "_common"
+
+.page
+	max-width: 50em
+	margin: 4em auto
+	padding: 0 2em
+
+.bookmarklet
+	margin: 2em 0
+	text-align: center
+
+	&-link
+		display: inline-block
+		border: 0.1em solid $border-color
+		border-radius: 1em
+		padding: 0.6em 1em 0.4em
+		font-size: 1.5em
+		&:hover
+			color: $background-color
+			background-color: $border-color
+			text-decoration: none
+
+	&-desc
+		margin: 1em 0
+		font-size: 0.8em
