@@ -8,8 +8,12 @@ export default function (data) {
 	report.className = 'report';
 
 	let headline = document.createElement('h1');
-	headline.textContent = 'Report for ' + data.href;
+	headline.textContent = 'Report for ';
 	report.appendChild(headline);
+
+	let link = document.createElement('a');
+	link.href = link.textContent = data.href;
+	headline.appendChild(link);
 
 	data.data.map((image, index) => reportImage(image, index))
 		.forEach(imageReport => {
