@@ -1,4 +1,5 @@
 import marked from 'marked';
+import prism from 'prismjs';
 import getDocs from './util/getDocs';
 import allSources from './util/allSources';
 
@@ -67,7 +68,11 @@ function reportImage(image, index) {
 		errors.forEach(error => report.appendChild(error));
 
 		let markup = document.createElement('pre');
-		markup.textContent = buildMarkup(image.markup);
+		markup.innerHTML = '<code>' + prism.highlight(
+			buildMarkup(image.markup),
+			prism.languages.html,
+			'html'
+		) + '</code>';
 		report.appendChild(markup);
 
 	}
@@ -82,7 +87,7 @@ function reportImage(image, index) {
 
 }
 
-function buildMarkup(markup, indentation = '', maxlength = 80) {
+function buildMarkup(markup, indentation = '', maxlength = 95) {
 
 	let html = indentation + '<' + markup.tag;
 
