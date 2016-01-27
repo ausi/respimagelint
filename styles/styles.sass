@@ -1,5 +1,6 @@
 @import "_normalize"
 @import "_common"
+@import "../node_modules/prismjs/themes/prism-okaidia"
 
 .page
 	max-width: 50em
@@ -24,3 +25,28 @@
 	&-desc
 		margin: 1em 0
 		font-size: 0.8em
+
+.report
+	max-width: 60em
+	margin: 0 auto
+	padding: 1em 2em
+
+	> h1
+		> a
+			font-size: 0.6em
+
+	&-item
+		margin: 3em 0
+		border-top: 1px solid $border-color
+
+		h2
+			color: $red
+
+		&.-passed h2
+			color: $green
+
+		&-header
+			> img
+				float: right
+				max-width: 50%
+				max-height: 4em

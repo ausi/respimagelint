@@ -9,6 +9,10 @@ export default function getDocs(key, section) {
 		return doc;
 	}
 
+	if (section === 'title') {
+		return doc.split('\n')[0].substr(2);
+	}
+
 	if (section === 'text') {
 		doc = doc.split(/^#[^\n]*/);
 	}
