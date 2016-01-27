@@ -22,7 +22,7 @@ export default function (document, includeDom = false) {
 		setStyles(document.documentElement, {overflow: 'hidden'});
 
 		iframe = document.createElement('iframe');
-		iframe.src = document.location.href + (document.location.search ? '&' : '?');
+		iframe.src = document.location.href.split('#')[0] + (document.location.search ? '&' : '?') + document.location.hash;
 		setStyles(iframe, {
 			position: 'absolute',
 			top: 0,
