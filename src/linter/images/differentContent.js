@@ -1,4 +1,5 @@
 import error from '../../util/error';
+import hashDistance from '../../util/hashDistance';
 
 const threshold = 265;
 
@@ -18,7 +19,7 @@ export default function(item, images) {
 				src2 !== src
 				&& images[src2].hash
 				&& images[src].hash !== images[src2].hash
-				&& distance(images[src].hash, images[src2].hash) > threshold
+				&& hashDistance(images[src].hash, images[src2].hash) > threshold
 				&& !errorImages[src]
 				&& !errorImages[src2]
 			) {
@@ -27,19 +28,11 @@ export default function(item, images) {
 					hash1: images[src].hash,
 					image2: src2,
 					hash2: images[src2].hash,
-					distance: Math.round(distance(images[src].hash, images[src2].hash) / (16 * 256) * 100) + '%',
+					distance: Math.round(hashDistance(images[src].hash, images[src2].hash) / (16 * 256) * 100) + '%',
 				});
 				errorImages[src] = true;
 				errorImages[src2] = true;
 			}
 		});
 	});
-}
-
-function distance(hashA, hashB) {
-	let dist = 0;
-	for (let i = 0; i < hashA.length; i++) {
-		dist += Math.abs(parseInt(hashA[i], 16) - parseInt(hashB[i], 16));
-	}
-	return dist;
 }

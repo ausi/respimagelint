@@ -1,6 +1,5 @@
 import error from '../../util/error';
-
-const threshold = 0.02;
+import sameRatio from '../../util/sameRatio';
 
 export default function(item, images) {
 	let sources = [];
@@ -15,19 +14,12 @@ export default function(item, images) {
 		}
 		sources.forEach(src2 => {
 			if (
-				src2 === src
-				|| !images[src2].size.width
-				|| !images[src2].size.height
-				|| errorImages[src]
-				|| errorImages[src2]
-			) {
-				return;
-			}
-			let srcW = Math.round(images[src2].size.width / images[src2].size.height * images[src].size.height);
-			let src2W = Math.round(images[src].size.width / images[src].size.height * images[src2].size.height);
-			if (
-				(srcW < images[src].size.width * (1 - threshold) || srcW > images[src].size.width * (1 + threshold))
-				&& (src2W < images[src2].size.width * (1 - threshold) || src2W > images[src2].size.width * (1 + threshold))
+				src2 !== src
+				&& images[src2].size.width
+				&& images[src2].size.height
+				&& !errorImages[src]
+				&& !errorImages[src2]
+				&& !sameRatio(images[src].size, images[src2].size)
 			) {
 				error(__filename, item, {
 					image1: src,
