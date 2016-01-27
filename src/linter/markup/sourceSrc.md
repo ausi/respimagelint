@@ -6,7 +6,7 @@ The `<source>` element only supports the `srcset` attribute.
 
 ```html
 <picture>
-	<source srcset="200x100.jpg">
+	<source srcset="200x200.jpg">
 	<img src="200x100.jpg">
 </picture>
 ```
@@ -15,7 +15,7 @@ The `<source>` element only supports the `srcset` attribute.
 
 ```html
 <picture>
-	<source src="200x100.jpg">
+	<source src="200x200.jpg">
 	<img src="200x100.jpg">
 </picture>
 ```
