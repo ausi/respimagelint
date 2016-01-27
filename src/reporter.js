@@ -20,6 +20,12 @@ export default function (data) {
 			report.appendChild(imageReport)
 		});
 
+	if (!data.data.length) {
+		let text = document.createElement('p');
+		text.textContent = 'No images were found on this page.';
+		report.appendChild(text);
+	}
+
 	return report;
 
 }
