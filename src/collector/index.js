@@ -32,7 +32,20 @@ export default function (document, includeDom = false) {
 		});
 
 		let promise = new Promise(resolve => {
-			iframe.addEventListener('load', resolve);
+			function checkLoaded() {
+				if (
+					iframe.contentWindow.jQuery
+					&& iframe.contentWindow.jQuery.active !== 0
+				) {
+					setTimeout(checkLoaded, 10);
+				}
+				else {
+					resolve();
+				}
+			}
+			iframe.addEventListener('load', () => {
+				setTimeout(checkLoaded);
+			});
 		});
 
 		document.body.appendChild(iframe);
