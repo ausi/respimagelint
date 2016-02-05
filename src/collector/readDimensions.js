@@ -11,12 +11,6 @@ export default function readDimensions(iframe, data, progress) {
 		let width = minWidth;
 		setStyles(iframe, {
 			width: width + 'px',
-			'max-width': 'none',
-			'min-width': 0,
-			height: '100vh',
-			'max-height': 'none',
-			'min-height': 0,
-			border: 0,
 		});
 		setStyles(iframe.contentWindow.document.documentElement, {overflow: 'hidden'});
 		setStyles(iframe.contentWindow.document.body, {overflow: 'hidden'});

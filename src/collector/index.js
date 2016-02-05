@@ -29,6 +29,13 @@ export default function (document, includeDom = false) {
 			left: 0,
 			opacity: 0,
 			'z-index': 2147483647,
+			width: '100vw',
+			'max-width': 'none',
+			'min-width': 0,
+			height: '100vh',
+			'max-height': 'none',
+			'min-height': 0,
+			border: 0,
 		});
 
 		let promise = new Promise(resolve => {
