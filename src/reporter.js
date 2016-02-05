@@ -194,7 +194,7 @@ function buildErrorMessage(key, data, images) {
 	});
 
 	Object.keys(data).forEach(key => {
-		message = message.split('{{' + key + '}}').join(data[key]);
+		message = message.split('{{' + key + '}}').join(data[key] || '\u200B');
 	});
 
 	element.innerHTML = marked(message);
