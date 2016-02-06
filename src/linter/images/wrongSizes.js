@@ -106,7 +106,7 @@ export default function(image) {
 
 }
 
-function computeLength(length, viewWidth) {
+function computeLength(length, viewWidth = 0) {
 
 	if (!length) {
 		return 0;

@@ -53,7 +53,7 @@ function parseMedia(attribute) {
 	let matches = attribute
 		.trim()
 		.toLowerCase()
-		.match(/^\(\s*((?:max|min)-width):\s*([0-9a-z]+)\s*\)$/i);
+		.match(/^\(\s*((?:max|min)-width):\s*([0-9a-z.]+)\s*\)$/i);
 	if (!matches) {
 		return attribute.trim();
 	}
