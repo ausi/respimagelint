@@ -9,25 +9,39 @@ export default function(image) {
 
 	const images = image.images;
 
+	let ignoreFollowing = false;
 	const sourcesByType = {};
 	allSources(image).forEach(item => {
+
+		if (ignoreFollowing) {
+			return;
+		}
+
 		let sources = [];
-		if (item.src) {
+		if (item.src && !item.srcset.length) {
 			sources.push(item.src);
 		}
 		item.srcset.forEach(({src}) => sources.push(src));
+
 		let largestSource = sources.sort(
 			(a, b) => images[b].size.width - images[a].size.width
 		).reduce(
 			(result, src) => result || (images[src].size.width && images[src].hash && src),
 			false
 		);
+
 		if (!largestSource) {
 			return;
 		}
+
 		let type = item.type || 'image/*';
 		sourcesByType[type] = sourcesByType[type] || [];
 		sourcesByType[type].push(largestSource);
+
+		if (type === 'image/*' && !item.media) {
+			ignoreFollowing = true;
+		}
+
 	});
 
 	const errorImages = {};
