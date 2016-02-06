@@ -126,14 +126,12 @@ function getImageHash(image) {
 
 	const size = 8;
 	const depth = 16;
-	const canvas = document.createElement('canvas');
-	canvas.width = canvas.height = size;
-	const ctx = canvas.getContext('2d');
 
 	let data;
 	try {
-		ctx.drawImage(image, 0, 0, size, size);
-		data = Array.from(ctx.getImageData(0, 0, size, size).data).reduce(
+		data = Array.from(
+			stepDownResize(image, size).getImageData(0, 0, size, size).data
+		).reduce(
 			(str, val) => str + Math.floor(val * (depth / 256)).toString(depth),
 			''
 		);
@@ -142,4 +140,30 @@ function getImageHash(image) {
 		data = false;
 	}
 	return data;
+}
+
+function stepDownResize(image, targetSize) {
+
+	const imageSize = Math.max(image.naturalWidth || 0, image.naturalHeight || 0, targetSize);
+	let size = targetSize;
+	while (size * 2 < imageSize) {
+		size *= 2;
+	}
+
+	const canvas = document.createElement('canvas');
+	canvas.width = canvas.height = size;
+	const ctx = canvas.getContext('2d');
+	ctx.drawImage(image, 0, 0, size, size);
+
+	while (size >= targetSize) {
+		ctx.drawImage(
+			canvas,
+			0, 0, size, size,
+			0, 0, size / 2, size / 2
+		);
+		size /= 2;
+	}
+
+	return ctx;
+
 }
