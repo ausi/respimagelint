@@ -4,6 +4,7 @@ import malformed from './malformed';
 import mixed from './mixed';
 import xAndSizes from './xAndSizes';
 import wrongSize from './wrongSize';
+import wrongX from './wrongX';
 
 export default function(image) {
 	allSources(image).forEach(item => {
@@ -12,5 +13,6 @@ export default function(image) {
 		mixed(item);
 		xAndSizes(item);
 		wrongSize(item, image.images);
+		wrongX(item, image.images);
 	});
 }
