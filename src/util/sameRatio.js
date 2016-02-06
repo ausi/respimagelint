@@ -1,7 +1,8 @@
 export default function sameRatio(
 	{width: widthA, height: heightA},
 	{width: widthB, height: heightB},
-	threshold = 0.02
+	threshold = 0.02,
+	thresholdPx = 2
 ) {
 
 	if (!widthA || !heightA || !widthB || !heightB) {
@@ -11,7 +12,7 @@ export default function sameRatio(
 	let aW = Math.round(widthB / heightB * heightA);
 	let bW = Math.round(widthA / heightA * heightB);
 
-	return (aW > widthA * (1 - threshold) && aW < widthA * (1 + threshold))
-		|| (bW > widthB * (1 - threshold) && bW < widthB * (1 + threshold));
+	return (aW > widthA * (1 - threshold) - thresholdPx && aW < widthA * (1 + threshold) + thresholdPx)
+		|| (bW > widthB * (1 - threshold) - thresholdPx && bW < widthB * (1 + threshold) + thresholdPx);
 
 }
