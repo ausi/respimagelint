@@ -22,8 +22,8 @@ The `<source>` element should only be used for art direction and format-based se
 ## Bad
 
 ```html
-<picture> <!-- exact same source -->
-	<source media="(max-width: 900px)" srcset="foo-200x100.jpg">
+<picture> <!-- exact same image but different URL -->
+	<source media="(max-width: 900px)" srcset="foo-200x100.jpg?foo">
 	<img src="foo-200x100.jpg">
 </picture>
 <picture> <!-- same contents, aspect ratio and format -->

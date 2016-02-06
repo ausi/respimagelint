@@ -16,7 +16,7 @@ gulp.task('test', ['module:test'], callback => {
 				url: 'file://' + htmlFile,
 			}),
 		];
-		childProcess.execFile(phantomjs.path, args, (err, stdout, stderr) => {
+		childProcess.execFile(phantomjs.path, args, {maxBuffer: Infinity}, (err, stdout, stderr) => {
 			if (err || stderr || !stdout) {
 				throw new Error([err && err.message, stderr, stdout].join('\n'));
 			}
@@ -165,6 +165,8 @@ function createImageFiles(tmpDir, html, callback) {
 }
 
 function createImage(url, tmpDir, callback) {
+
+	url = url.split('?')[0];
 
 	let format = url.split('.')[1];
 	let name = 'default';
