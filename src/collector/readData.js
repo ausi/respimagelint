@@ -37,11 +37,11 @@ function parseSizes(attribute) {
 	}
 	return attribute.split(',').map(size => {
 		size = size.trim();
-		let media, pos;
-		if ((pos = size.lastIndexOf(' ')) !== -1) {
-			media = parseMedia(size.substr(0, pos).trim());
-			size = size.substr(pos).trim();
-		}
+		let media;
+		size = size.replace(/^\(.+?\)\s+/, match => {
+			media = parseMedia(match.trim());
+			return '';
+		});
 		return {size, media};
 	});
 }
