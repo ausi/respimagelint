@@ -37,6 +37,7 @@ export default function(image) {
 			sourcesByType[type].forEach((src2, index2) => {
 				if (
 					index2 !== index
+					&& src !== src2
 					&& hashDistance(images[src].hash, images[src2].hash) < threshold
 					&& sameRatio(images[src].size, images[src2].size)
 					&& !errorImages[src]
