@@ -51,7 +51,14 @@ export default function readImages(document, data, progress) {
 
 			if (currentImage) {
 				readImage(currentImage);
-				delete currentImage.element;
+				if (!currentImage.hash && currentImage.element.src.split('/')[2] !== 'crossorigin.me') {
+					currentImage.element = new Image();
+					currentImage.element.crossOrigin = 'anonymous';
+					currentImage.element.src = 'https://crossorigin.me/' + currentImage.url;
+				}
+				else {
+					delete currentImage.element;
+				}
 			}
 
 			if (Object.keys(images).reduce((done, key) => done && !images[key].element, true)) {
@@ -111,15 +118,15 @@ function resolveUrl(document, url) {
 }
 
 function readImage(image) {
-	image.size = {
+	image.size = image.size || {
 		width: image.element.naturalWidth,
 		height: image.element.naturalHeight,
 	};
-	image.type = image.url.split('#')[0].split('?')[0].split('.').pop().toLowerCase();
+	image.type = image.type || image.url.split('#')[0].split('?')[0].split('.').pop().toLowerCase();
 	if (image.type === 'jpg') {
 		image.type = 'jpeg';
 	}
-	image.hash = getImageHash(image.element);
+	image.hash = image.hash || getImageHash(image.element);
 }
 
 function getImageHash(image) {
