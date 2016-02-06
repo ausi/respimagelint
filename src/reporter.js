@@ -68,11 +68,24 @@ function reportImage(image, index) {
 		errors.forEach(error => report.appendChild(error));
 
 		let markup = document.createElement('pre');
-		markup.innerHTML = '<code>' + prism.highlight(
+		let html = '<code>' + prism.highlight(
 			buildMarkup(image.markup),
 			prism.languages.html,
 			'html'
 		) + '</code>';
+
+		Object.keys(image.images).sort(
+			(a, b) => b.length - a.length
+		).forEach(src => {
+			html = html.replace(new RegExp(
+				'([>,\\s])('
+				+ src.replace(/&/g, '&amp;').replace(/[.?*+^$[\]\\(){}|-]/g, '\\$&')
+				+ ')([<,\\s])'
+			, 'g'), '$1<a class="token regex" href="' + image.images[src].url + '">$2</a>$3');
+		});
+
+		markup.innerHTML = html;
+
 		report.appendChild(markup);
 
 	}
