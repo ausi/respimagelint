@@ -51,7 +51,7 @@ export default function readImages(document, data, progress) {
 
 			if (currentImage) {
 				readImage(currentImage);
-				if (!currentImage.hash && currentImage.element.src.split('/')[2] !== 'crossorigin.me') {
+				if (currentImage.hash === null && currentImage.element.src.split('/')[2] !== 'crossorigin.me') {
 					currentImage.element = new Image();
 					currentImage.element.crossOrigin = 'anonymous';
 					currentImage.element.src = 'https://crossorigin.me/' + currentImage.url;
@@ -144,7 +144,10 @@ function getImageHash(image) {
 		);
 	}
 	catch (e) {
-		data = false;
+		// Check for security error because of tainted canvas
+		if (e.code === 18) {
+			data = null;
+		}
 	}
 	return data;
 }
