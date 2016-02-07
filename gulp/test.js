@@ -140,10 +140,10 @@ function createImageFiles(tmpDir, html, callback) {
 
 	let images = [];
 
-	regExpMatchAll(/src(?:set)="([^"]+)"/g, html).forEach(match => {
+	regExpMatchAll(/src(?:set)?="([^"]+)"/g, html).forEach(match => {
 		let urls = match[1].split(/[\s,]+/);
 		urls.forEach(url => {
-			if (url.match(/.+\.jpg/)) {
+			if (url.match(/.+\.jpg$/)) {
 				images.push(url);
 			}
 		});
