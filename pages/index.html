@@ -13,7 +13,7 @@
 	<div class="bookmarklet">
 		<a
 			class="bookmarklet-link"
-			href="javascript:(function(s){s.id='respimagelint-script';s.type='text/javascript';s.src='https://ausi.github.io/respimagelint/collector.js?'+Date.now();document.body.appendChild(s)})(document.createElement('script'))"
+			href="{{> bookmarklet}}"
 			onclick="alert(this.nextElementSibling.textContent); return false;"
 			title="Lint Images"
 		>
