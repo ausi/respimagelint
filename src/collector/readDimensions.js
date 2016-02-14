@@ -94,5 +94,8 @@ function addDimension(image, width) {
 }
 
 function imageWidth(img) {
-	return img.offsetWidth;
+	const style = getComputedStyle(img);
+	return img.clientWidth
+		- parseFloat(style.paddingLeft)
+		- parseFloat(style.paddingRight);
 }
