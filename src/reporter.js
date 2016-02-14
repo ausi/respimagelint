@@ -201,6 +201,7 @@ function buildErrorMessage(key, data, images) {
 		if (images[data[key]]) {
 			data[key + 'Url'] = images[data[key]].url;
 			data[key + 'Type'] = images[data[key]].type;
+			data[key + 'Size'] = images[data[key]].size.width + 'x' + images[data[key]].size.height;
 			data[key + 'Width'] = images[data[key]].size.width;
 			data[key + 'Height'] = images[data[key]].size.height;
 		}

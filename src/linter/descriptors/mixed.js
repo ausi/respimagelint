@@ -1,7 +1,9 @@
 import error from '../../util/error';
 
 export default function(item) {
-	let descriptors = item.srcset.map(({descriptor}) => (descriptor || '1x'));
+	let descriptors = item.srcset.map(
+		({descriptor}) => (descriptor || '1x').replace(/(?:\s+|^)\d+h(?:\s+|$)/, '')
+	);
 	if (
 		descriptors.length > 1
 		&& descriptors.map(
