@@ -111,7 +111,7 @@ function buildMarkup(markup, indentation = '', maxlength = 95) {
 				&& value.indexOf(',') !== -1
 				&& name.length + value.length + indentation.length * 4 + 7 > maxlength
 			) {
-				value = '\n' + indentation + '\t\t' + value.trim().replace(/,\s*/g, ',\n' + indentation + '\t\t') + '\n' + indentation + '\t';
+				value = '\n' + indentation + '\t\t' + value.trim().replace(/,\s+/g, ',\n' + indentation + '\t\t') + '\n' + indentation + '\t';
 			}
 			return name + '="' + value + '"';
 		});

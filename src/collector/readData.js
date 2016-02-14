@@ -25,10 +25,17 @@ function parseSrcset(attribute) {
 	if (!attribute) {
 		return [];
 	}
-	return attribute.split(',').map(source => {
-		let [src, descriptor] = source.trim().split(/\s+/);
-		return {src, descriptor};
-	});
+	const srcset = [];
+	attribute.replace(
+		/,*(\S*?[^\s,])(?:\s,|,+\s|,?$|\s([^,]+)(?:,|$))/g,
+		(match, src, descriptor) => {
+			srcset.push({
+				src,
+				descriptor: descriptor && descriptor.trim(),
+			});
+		}
+	);
+	return srcset;
 }
 
 function parseSizes(attribute) {
