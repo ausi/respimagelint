@@ -5,13 +5,13 @@ The `srcset` attribute isn’t for art direction, so the images must therefore o
 ## Good
 
 ```html
-<img src="foo-200x100.jpg" srcset="foo-200x100.jpg 1x, foo-400x200.jpg 2x">
+<img src="cat-200x100.jpg" srcset="cat-200x100.jpg 1x, cat-400x200.jpg 2x">
 ```
 
 ## Bad
 
 ```html
-<img src="foo-200x100.jpg" srcset="foo-200x100.jpg 1x, bar-400x200.jpg 2x">
+<img src="cat-200x100.jpg" srcset="cat-200x100.jpg 1x, dog-400x200.jpg 2x">
 ```
 
 ## Error template

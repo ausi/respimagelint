@@ -6,16 +6,16 @@ The `<source>` element should only be used for art direction and format-based se
 
 ```html
 <picture> <!-- different content -->
-	<source srcset="foo-200x100.jpg" media="(max-width: 600px)">
-	<img src="bar-200x100.jpg">
+	<source srcset="cat-200x100.jpg" media="(max-width: 600px)">
+	<img src="dog-200x100.jpg">
 </picture>
 <picture> <!-- different aspect ratio -->
-	<source srcset="foo-100x100.jpg" media="(max-width: 600px)">
-	<img src="foo-200x100.jpg">
+	<source srcset="cat-100x100.jpg" media="(max-width: 600px)">
+	<img src="cat-200x100.jpg">
 </picture>
 <picture> <!-- different image type -->
-	<source srcset="foo-200x100.webp" type="image/webp">
-	<img src="foo-200x100.jpg">
+	<source srcset="cat-200x100.webp" type="image/webp">
+	<img src="cat-200x100.jpg">
 </picture>
 ```
 
@@ -23,12 +23,12 @@ The `<source>` element should only be used for art direction and format-based se
 
 ```html
 <picture> <!-- exact same image but different URL -->
-	<source media="(max-width: 900px)" srcset="foo-200x100.jpg?foo">
-	<img src="foo-200x100.jpg">
+	<source media="(max-width: 900px)" srcset="cat-200x100.jpg?foo">
+	<img src="cat-200x100.jpg">
 </picture>
 <picture> <!-- same contents, aspect ratio and format -->
-	<source media="(max-width: 900px)" srcset="foo-400x200.jpg">
-	<img src="foo-200x100.jpg">
+	<source media="(max-width: 900px)" srcset="cat-400x200.jpg">
+	<img src="cat-200x100.jpg">
 </picture>
 ```
 
