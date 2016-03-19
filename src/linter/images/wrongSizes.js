@@ -99,7 +99,7 @@ export default function(image) {
 			imageWidth: firstItem.imageWidth,
 			targetWidth: firstItem.targetWidth,
 			difference: Math.round((1 - (firstItem.imageWidth / firstItem.targetWidth)) * -100) + '%',
-			viewportRanges: viewportRanges.map(range => range.join('-')).join(', '),
+			viewportRanges: viewportRanges.map(range => range[0] === range[1] ? range[0] : range.join('-')).join(', '),
 		});
 
 	});
