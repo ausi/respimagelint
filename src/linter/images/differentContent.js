@@ -1,7 +1,7 @@
 import error from '../../util/error';
 import hashDistance from '../../util/hashDistance';
 
-const threshold = 265;
+const threshold = 1 / 25;
 
 export default function(item, images) {
 	let sources = [];
@@ -28,7 +28,7 @@ export default function(item, images) {
 					hash1: images[src].hash,
 					image2: src2,
 					hash2: images[src2].hash,
-					distance: Math.round(hashDistance(images[src].hash, images[src2].hash) / (16 * 256) * 100) + '%',
+					distance: Math.round(hashDistance(images[src].hash, images[src2].hash) * 100) + '%',
 				});
 				errorImages[src] = true;
 				errorImages[src2] = true;

@@ -9,6 +9,6 @@ export default function hashDistance(hashA, hashB) {
 		dist += Math.abs(parseInt(hashA[i], 16) - parseInt(hashB[i], 16));
 	}
 
-	return dist;
+	return dist / hashA.length / 15;
 
 }

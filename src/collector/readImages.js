@@ -136,12 +136,29 @@ function getImageHash(image) {
 
 	let data;
 	try {
+		let empty = true;
 		data = Array.from(
 			stepDownResize(image, size).getImageData(0, 0, size, size).data
 		).reduce(
-			(str, val) => str + Math.floor(val * (depth / 256)).toString(depth),
+			(str, val, i, arr) => {
+				if (val) {
+					empty = false;
+				}
+				if ((i + 1) % 4) {
+					var opacity = arr[i + (4 - ((i + 1) % 4))] / 255;
+					val *= opacity;
+					if (i % 4 === i % 8) {
+						val += 255 * (1 - opacity);
+					}
+					str += Math.round(val * ((depth - 1) / 255)).toString(depth);
+				}
+				return str;
+			},
 			''
 		);
+		if (empty) {
+			data = undefined;
+		}
 	}
 	catch (e) {
 		// Check for security error because of tainted canvas
@@ -149,6 +166,7 @@ function getImageHash(image) {
 			data = null;
 		}
 	}
+
 	return data;
 }
 
@@ -160,14 +178,23 @@ function stepDownResize(image, targetSize) {
 		size *= 2;
 	}
 
-	const canvas = document.createElement('canvas');
-	canvas.width = canvas.height = size;
-	const ctx = canvas.getContext('2d');
+	const ctx = createCanvasCtx(size);
+	const ctxTmp = createCanvasCtx(size);
 	ctx.drawImage(image, 0, 0, size, size);
 
-	while (size >= targetSize) {
+	// Throw tainted canvas security error before resizing
+	ctx.getImageData(0, 0, 1, 1);
+
+	while (size > targetSize) {
+		ctxTmp.clearRect(0, 0, size, size);
+		ctxTmp.drawImage(
+			ctx.canvas,
+			0, 0, size, size,
+			0, 0, size, size
+		);
+		ctx.clearRect(0, 0, size / 2, size / 2);
 		ctx.drawImage(
-			canvas,
+			ctxTmp.canvas,
 			0, 0, size, size,
 			0, 0, size / 2, size / 2
 		);
@@ -176,4 +203,10 @@ function stepDownResize(image, targetSize) {
 
 	return ctx;
 
+}
+
+function createCanvasCtx(size) {
+	const canvas = document.createElement('canvas');
+	canvas.width = canvas.height = size;
+	return canvas.getContext('2d');
 }

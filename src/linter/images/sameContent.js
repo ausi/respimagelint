@@ -3,7 +3,7 @@ import allSources from '../../util/allSources';
 import hashDistance from '../../util/hashDistance';
 import sameRatio from '../../util/sameRatio';
 
-const threshold = 265;
+const threshold = 1 / 16;
 
 export default function(image) {
 
@@ -62,7 +62,7 @@ export default function(image) {
 						hash1: images[src].hash,
 						image2: src2,
 						hash2: images[src2].hash,
-						distance: Math.round(hashDistance(images[src].hash, images[src2].hash) / (16 * 256) * 100) + '%',
+						distance: Math.round(hashDistance(images[src].hash, images[src2].hash) * 100) + '%',
 					});
 					errorImages[src] = true;
 					errorImages[src2] = true;

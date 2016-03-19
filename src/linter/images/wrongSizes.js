@@ -1,8 +1,8 @@
 import error from '../../util/error';
 import allSources from '../../util/allSources';
 
-const threshold = 0.02;
-const thresholdPx = 10;
+const threshold = 0.03;
+const thresholdPx = 15;
 
 export default function(image) {
 
