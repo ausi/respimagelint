@@ -1,6 +1,6 @@
 # Images in different `<source>` elements shouldn’t be the same
 
-The `<source>` element should only be used for art direction and format-based selection. For providing multiple resolutions of the same image use the `srcset` attribute instead.
+The `<source>` element should only be used for art direction and format-based selection. For providing multiple resolutions of the same image use the `srcset` attribute instead. [More information on CSS-Tricks](https://css-tricks.com/responsive-images-youre-just-changing-resolutions-use-srcset/).
 
 ## Good
 
@@ -22,12 +22,12 @@ The `<source>` element should only be used for art direction and format-based se
 ## Bad
 
 ```html
-<picture> <!-- exact same image but different URL -->
-	<source media="(max-width: 900px)" srcset="cat-200x100.jpg?foo">
-	<img src="cat-200x100.jpg">
-</picture>
 <picture> <!-- same contents, aspect ratio and format -->
 	<source media="(max-width: 900px)" srcset="cat-400x200.jpg">
+	<img src="cat-200x100.jpg">
+</picture>
+<picture> <!-- exact same image but different URL -->
+	<source media="(max-width: 900px)" srcset="cat-200x100.jpg?foo">
 	<img src="cat-200x100.jpg">
 </picture>
 ```

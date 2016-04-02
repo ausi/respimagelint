@@ -55,12 +55,14 @@ gulp.task('docs', callback => {
 			key = key.join('.');
 			var title = marked(getDocs(key, 'title'), markdownConfig).replace(/<\/?p>/gi, '').trim();
 			indexHtml += '<li><a href="#' + key + '">' + title + '</a></li>';
+			docsHtml += '<div class="docs-item">'
 			docsHtml += '<h2 id="' + key + '">' + title + '</h2>\n';
 			docsHtml += marked(getDocs(key, 'text'), markdownConfig);
 			docsHtml += '<h3>Correct</h3>\n';
 			docsHtml += marked(getDocs(key, 'Good'), markdownConfig);
 			docsHtml += '<h3>Incorrect</h3>\n';
 			docsHtml += marked(getDocs(key, 'Bad'), markdownConfig);
+			docsHtml += '</div>'
 		});
 
 		var docsHtml = '<!doctype html>\n'
