@@ -38,7 +38,7 @@ export default function (document, includeDom = false) {
 			border: 0,
 		});
 
-		let promise = new Promise(resolve => {
+		let promise = new Promise((resolve, reject) => {
 			function checkLoaded() {
 				if (
 					iframe.contentWindow.jQuery
@@ -51,6 +51,13 @@ export default function (document, includeDom = false) {
 				}
 			}
 			iframe.addEventListener('load', () => {
+				try {
+					let doc = iframe.contentWindow.document;
+				}
+				catch(e) {
+					reject(new Error('Failed loading page into iframe.'));
+					return;
+				}
 				setTimeout(checkLoaded);
 			});
 		});

@@ -29,4 +29,7 @@ collector(document).then(data => {
 
 }).then(() => {
 	document.location.href = scriptHost + '/dist/linter.html';
+}).catch(err => {
+	alert(err);
+	document.location.reload();
 });
