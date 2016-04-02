@@ -7,10 +7,11 @@ import livereload from 'gulp-livereload';
 gulp.task('module:collector', ['docs'], () =>
 	browserify({
 		entries: './src/collector.js',
-		debug: true,
+		//debug: true,
 	})
 		.transform(babelify)
 		.transform('brfs')
+		.transform({global: true}, 'uglifyify')
 		.bundle()
 		.pipe(source('collector.js'))
 		.pipe(gulp.dest('./dist'))
@@ -20,10 +21,11 @@ gulp.task('module:collector', ['docs'], () =>
 gulp.task('module:linter', ['docs'], () =>
 	browserify({
 		entries: './src/linter.js',
-		debug: true,
+		//debug: true,
 	})
 		.transform(babelify)
 		.transform('brfs')
+		.transform({global: true}, 'uglifyify')
 		.bundle()
 		.pipe(source('linter.js'))
 		.pipe(gulp.dest('./dist'))
@@ -33,10 +35,11 @@ gulp.task('module:linter', ['docs'], () =>
 gulp.task('module:store', () =>
 	browserify({
 		entries: './src/store.js',
-		debug: true,
+		//debug: true,
 	})
 		.transform(babelify)
 		.transform('brfs')
+		.transform({global: true}, 'uglifyify')
 		.bundle()
 		.pipe(source('store.js'))
 		.pipe(gulp.dest('./dist'))
