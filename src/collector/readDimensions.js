@@ -40,7 +40,7 @@ export default function readDimensions(iframe, data, progress) {
 
 		function resizeStep(startTime = Date.now()) {
 
-			progress((width - minWidth) / (maxWidth - minWidth));
+			progress((width - minWidth) / (maxWidth - minWidth), width);
 
 			// Chrome (43) needs some time to update image sizes based on the sizes attribute
 			if (referenceElement && imageWidth(referenceElement) !== width) {
@@ -60,7 +60,7 @@ export default function readDimensions(iframe, data, progress) {
 			addDimensions(data, width);
 			width += stepSize;
 			if (width > maxWidth) {
-				progress(1);
+				progress(1, maxWidth);
 				resolve();
 				return;
 			}

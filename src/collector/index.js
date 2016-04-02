@@ -8,10 +8,11 @@ import setStyles from '../util/setStyles';
 
 export default function (document, includeDom = false) {
 
-	let iframe, data, progressBar, overlay;
+	let iframe, data, progressBar, progressMessage, overlay;
 
-	function progress(done) {
+	function progress(done, message) {
 		progressBar.value = done;
+		progressMessage.textContent = message;
 		setStyles(overlay, {opacity: done * 0.5 + 0.5});
 		document.title = Math.round(done * 100) + '% collecting data...';
 	}
@@ -91,33 +92,51 @@ export default function (document, includeDom = false) {
 		});
 		document.body.appendChild(progressBar);
 
-		progress(0.05);
+		progressMessage = document.createElement('div');
+		setStyles(progressMessage, {
+			position: 'fixed',
+			top: '50%',
+			left: '0',
+			transform: 'translate(0, 50px)',
+			width: '100%',
+			'text-align': 'center',
+			'font-size': '16px',
+			color: 'black',
+			'white-space': 'pre-line',
+			'text-shadow': '0 0 2px white, 0 0 2px white, 0 0 2px white, 0 0 2px white',
+			'z-index': 2147483647,
+		});
+		document.body.appendChild(progressMessage);
+
+		progress(0.05, 'Loading page into frame...');
 
 		return promise;
 
 	}).then(() => {
 
-		progress(0.1);
+		progress(0.1, 'Resizing');
 
 		data = find(iframe.contentWindow.document)
 			.map(readData)
 			.map(readMarkup);
 
-		return readDimensions(iframe, data, progressDone => {
-			progress(0.1 + (0.8 * progressDone));
+		return readDimensions(iframe, data, (progressDone, width) => {
+			progress(0.1 + (0.8 * progressDone), 'Resizing to ' + width);
 		});
 
 	}).then(() => {
 
-		progress(0.9);
+		progress(0.9, 'Reading image');
 
-		return readImages(iframe.contentWindow.document, data, progressDone => {
-			progress(0.9 + (0.1 * progressDone));
+		return readImages(iframe.contentWindow.document, data, (progressDone, count, image) => {
+			if (image) {
+				progress(0.9 + (0.1 * progressDone), 'Reading image ' + Math.round(progressDone * count) + ' of ' + count + '\n' + image.url);
+			}
 		});
 
 	}).then(() => {
 
-		progress(1);
+		progress(1, 'Done');
 
 		if (!includeDom) {
 			data.forEach(image => {

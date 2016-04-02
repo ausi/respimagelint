@@ -36,11 +36,6 @@ export default function readImages(document, data, progress) {
 
 		function step(startTime = Date.now()) {
 
-			progress(Object.keys(images).reduce(
-				(count, key) => count + (images[key].element ? 0 : 1),
-				0
-			) / (Object.keys(images).length || 1));
-
 			let currentImage;
 
 			Object.keys(images).forEach(key => {
@@ -48,6 +43,11 @@ export default function readImages(document, data, progress) {
 					currentImage = images[key];
 				}
 			});
+
+			progress(Object.keys(images).reduce(
+				(count, key) => count + (images[key].element ? 0 : 1),
+				0
+			) / (Object.keys(images).length || 1), Object.keys(images).length, currentImage);
 
 			if (currentImage) {
 				readImage(currentImage);
@@ -62,7 +62,7 @@ export default function readImages(document, data, progress) {
 			}
 
 			if (Object.keys(images).reduce((done, key) => done && !images[key].element, true)) {
-				progress(1);
+				progress(1, Object.keys(images).length);
 				finish();
 				return;
 			}
