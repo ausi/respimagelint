@@ -1,0 +1,255 @@
+html {
+  -ms-text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0; }
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+main,
+menu,
+nav,
+section,
+summary {
+  display: block; }
+
+a {
+  background-color: transparent; }
+  a:active, a:hover {
+    outline: 0; }
+
+b,
+strong {
+  font-weight: bold; }
+
+img {
+  border: 0; }
+
+pre {
+  overflow: auto; }
+
+code,
+kbd,
+pre,
+samp {
+  font-family: monospace, monospace;
+  font-size: 1em; }
+
+html {
+  box-sizing: border-box;
+  -moz-tab-size: 4;
+    -o-tab-size: 4;
+       tab-size: 4;
+  font: 87.5%/1.5 sans-serif;
+  letter-spacing: 0.02em;
+  color: black; }
+  @media (min-width: 600px) {
+    html {
+      font-size: 100%; } }
+  @media (min-width: 800px) {
+    html {
+      font-size: 112.5%; } }
+  @media (min-width: 1000px) {
+    html {
+      font-size: 125%; } }
+
+*, *:before, *:after {
+  box-sizing: inherit; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 1.5em 0 0.5em;
+  font-family: Georgia, serif; }
+
+h1, h2 {
+  line-height: 1.2; }
+
+h1 {
+  font-size: 1.75em; }
+
+h2 {
+  font-size: 1.5em; }
+
+h3 {
+  font-size: 1.1em; }
+
+p {
+  margin: 0.5em 0; }
+
+a {
+  color: #2D7AB3;
+  text-decoration: none; }
+  a:visited {
+    color: #882DB3; }
+  a:hover, a:focus {
+    color: #2D7AB3;
+    text-decoration: underline; }
+
+pre, code {
+  border-radius: 0.2em;
+  color: white;
+  background: black; }
+
+code {
+  padding: 0.1em 0.3em;
+  font-size: 0.9em; }
+
+pre {
+  margin: 2em 0;
+  padding: 0.5em 0.75em;
+  -webkit-overflow-scrolling: touch; }
+  pre > code {
+    padding: 0; }
+
+/**
+ * okaidia theme for JavaScript, CSS and HTML
+ * Loosely based on Monokai textmate theme by http://www.monokai.nl/
+ * @author ocodia
+ */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #f8f8f2;
+  text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+  font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  direction: ltr;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.5;
+  -moz-tab-size: 4;
+  -o-tab-size: 4;
+  tab-size: 4;
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none; }
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: 1em;
+  margin: .5em 0;
+  overflow: auto;
+  border-radius: 0.3em; }
+
+:not(pre) > code[class*="language-"],
+pre[class*="language-"] {
+  background: #272822; }
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em; }
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: slategray; }
+
+.token.punctuation {
+  color: #f8f8f2; }
+
+.namespace {
+  opacity: .7; }
+
+.token.property,
+.token.tag,
+.token.constant,
+.token.symbol,
+.token.deleted {
+  color: #f92672; }
+
+.token.boolean,
+.token.number {
+  color: #ae81ff; }
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin,
+.token.inserted {
+  color: #a6e22e; }
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string,
+.token.variable {
+  color: #f8f8f2; }
+
+.token.atrule,
+.token.attr-value,
+.token.function {
+  color: #e6db74; }
+
+.token.keyword {
+  color: #66d9ef; }
+
+.token.regex,
+.token.important {
+  color: #fd971f; }
+
+.token.important,
+.token.bold {
+  font-weight: bold; }
+
+.token.italic {
+  font-style: italic; }
+
+.token.entity {
+  cursor: help; }
+
+.page {
+  max-width: 50em;
+  margin: 4em auto;
+  padding: 0 2em; }
+
+.bookmarklet {
+  margin: 2em 0;
+  text-align: center; }
+  .bookmarklet-link {
+    display: inline-block;
+    border: 0.1em solid #CCCCCC;
+    border-radius: 1em;
+    padding: 0.6em 1em 0.4em;
+    font-size: 1.5em; }
+    .bookmarklet-link:hover {
+      color: white;
+      background-color: #CCCCCC;
+      text-decoration: none; }
+  .bookmarklet-desc {
+    margin: 1em 0;
+    font-size: 0.8em; }
+
+.report {
+  max-width: 60em;
+  margin: 0 auto;
+  padding: 1em 2em; }
+  .report > h1 > a {
+    font-size: 0.6em;
+    white-space: nowrap; }
+  .report-item {
+    margin: 3em 0;
+    border-top: 1px solid #CCCCCC; }
+    .report-item h2 {
+      color: crimson; }
+    .report-item.-passed h2 {
+      color: seagreen; }
+    .report-item-header > img {
+      float: right;
+      max-width: 50%;
+      max-height: 4em; }
+
+.docs-item {
+  margin: 4em 0;
+  border-top: 1px solid #CCCCCC; }

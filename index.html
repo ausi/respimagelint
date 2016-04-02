@@ -1,0 +1,30 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>RespImageLint</title>
+<link rel="stylesheet" href="styles.css">
+<body>
+
+<div class="page">
+
+	<h1>RespImageLint - Linter for Responsive Images</h1>
+
+ 	<p>RespImageLint is a bookmarklet that checks images of a webpage against a list of <a href="docs.html">common mistakes and best practises</a>. Just run the bookmarklet and see if it detects any problems with your images. You can find more information on the <a href="https://github.com/ausi/RespImageLint">Project page on Github</a>.</p>
+
+	<div class="bookmarklet">
+		<a
+			class="bookmarklet-link"
+			href="javascript:(function(){!function()%7Bvar%20e%3Ddocument.createElement(%22script%22)%3Be.id%3D%22respimagelint-script%22%2Ce.type%3D%22text%2Fjavascript%22%2Ce.src%3D%22%7B%7BbaseUrl%7D%7Dcollector.js%3F%22%2BDate.now()%2Cdocument.body.appendChild(e)%7D()%3B})()"
+			onclick="alert(this.nextElementSibling.textContent); return false;"
+			title="Lint Images"
+		>Lint Images</a>
+		<p class="bookmarklet-desc">
+			Drag this link to your bookmarks or right click and bookmark it.
+		</p>
+		<script>
+			(function(link) {
+				link.setAttribute('href', link.getAttribute('href').replace(/%7B%7BbaseUrl%7D%7D/g, encodeURIComponent(document.location.href.split('?')[0].replace(/[^/]+$/, ''))));
+			})(document.querySelector('.bookmarklet-link'));
+		</script>
+	</div>
+
+</div>
