@@ -1,7 +1,7 @@
 import error from '../../util/error';
 import allSources from '../../util/allSources';
 
-const threshold = 0.03;
+const threshold = 0.05;
 const thresholdPx = 15;
 
 export default function(image) {
@@ -58,6 +58,7 @@ export default function(image) {
 				) {
 					errorItems[itemIndex] = errorItems[itemIndex] || {};
 					errorItems[itemIndex][viewWidth] = {
+						viewWidth,
 						targetWidth,
 						imageWidth,
 						size,
@@ -76,7 +77,14 @@ export default function(image) {
 			return;
 		}
 
-		const firstItem = errorItems[itemIndex][Object.keys(errorItems[itemIndex])[0]];
+		const firstItem = errorItems[itemIndex][
+			[
+				1280, 1440, 1000, 320, 480, 1920,
+				Object.keys(errorItems[itemIndex])[0],
+			].filter(
+				viewWidth => errorItems[itemIndex][viewWidth]
+			)[0]
+		];
 
 		const viewportRanges = [];
 		let lastViewWidth = 0;
@@ -95,7 +103,7 @@ export default function(image) {
 					? '(' + Object.keys(media)[0] + ': ' + media[Object.keys(media)[0]] + ')'
 					: media
 				) + ' ' : '') + size).join(', '),
-			viewWidth: +Object.keys(errorItems[itemIndex])[0],
+			viewWidth: firstItem.viewWidth,
 			imageWidth: firstItem.imageWidth,
 			targetWidth: firstItem.targetWidth,
 			difference: Math.round((1 - (firstItem.imageWidth / firstItem.targetWidth)) * -100) + '%',

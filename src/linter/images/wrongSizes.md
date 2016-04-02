@@ -44,14 +44,14 @@ The `sizes` attribute is a hint for browsers which should tell them how large th
 <picture>
 	<source
 		media="(min-width: 600px)"
-		sizes="400px"
-		srcset="400x400.jpg 400w, 800x800.jpg 800w"
-	>
-	<img
-		style="width: 400px"
 		sizes="200px"
 		srcset="200x100.jpg 200w, 400x200.jpg 400w"
-		src="200x100.jpg"
+	>
+	<img
+		style="width: 200px"
+		sizes="400px"
+		srcset="400x400.jpg 400w, 800x800.jpg 800w"
+		src="400x400.jpg"
 	>
 </picture>
 ```
