@@ -1,7 +1,7 @@
 import setStyles from '../util/setStyles';
 
 const minWidth = 300;
-const maxWidth = 4000;
+const maxWidth = 3000;
 const stepSize = 10;
 
 export default function readDimensions(iframe, data, progress) {
