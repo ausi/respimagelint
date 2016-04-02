@@ -1,7 +1,7 @@
 import collector from './collector/index';
 
 const script = document.getElementById('respimagelint-script');
-const scriptHost = script.src.split('/', 3).join('/');
+const scriptBase = script.src.split('?')[0].replace(/[^/]+$/, '');
 
 collector(document).then(data => {
 
@@ -22,13 +22,13 @@ collector(document).then(data => {
 		});
 
 		let store = document.createElement('iframe');
-		store.src = scriptHost + '/dist/store.html';
+		store.src = scriptBase + 'store.html';
 		document.body.appendChild(store);
 
 	});
 
 }).then(() => {
-	document.location.href = scriptHost + '/dist/linter.html';
+	document.location.href = scriptBase + 'linter.html';
 }).catch(err => {
 	alert(err);
 	document.location.reload();
