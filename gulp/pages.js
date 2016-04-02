@@ -10,7 +10,7 @@ gulp.task('pages', () =>
 	gulp.src(['./pages/**/*.html'])
 		.pipe(replace(
 			'{{> bookmarklet}}',
-			'javascript:(function(){' + encodeURI(uglify.minify(
+			'javascript:(function(){' + encodeURIComponent(uglify.minify(
 				path.join(__dirname, '..', 'src', 'bookmarklet.js')
 			).code) + '})()'
 		))
