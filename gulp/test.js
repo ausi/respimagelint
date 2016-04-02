@@ -101,7 +101,8 @@ function createHtmlFile(callback) {
 	}
 
 	let docs = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'tmp', 'docs.json')));
-	let html = '';
+	let html = '<!doctype html>';
+	html += '<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">';
 
 	html += Object.keys(docs).map(key => {
 		let sections = docs[key].split('\n## ');
