@@ -17,9 +17,7 @@
 			onclick="alert(this.nextElementSibling.textContent); return false;"
 			title="Lint Images"
 		>Lint Images</a>
-		<p class="bookmarklet-desc">
-			Drag this link to your bookmarks or right click and bookmark it.
-		</p>
+		<p class="bookmarklet-desc">Drag this link to your bookmarks or right click and bookmark it.</p>
 		<script>
 			(function(link) {
 				link.setAttribute('href', link.getAttribute('href').replace(/%7B%7BbaseUrl%7D%7D/g, encodeURIComponent(document.location.href.split('?')[0].replace(/[^/]+$/, ''))));
