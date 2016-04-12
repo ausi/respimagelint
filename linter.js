@@ -98,7 +98,7 @@ function cleanUpNextTick(){draining=!1,currentQueue.length?queue=currentQueue.co
 }).call(this,"/src/linter/markup/duplicateImg.js")
 },{"../../util/error":31}],23:[function(require,module,exports){
 (function (__filename){
-"use strict";function _interopRequireDefault(e){return e&&e.__esModule?e:{"default":e}}Object.defineProperty(exports,"__esModule",{value:!0}),exports["default"]=function(e){var r=[];"picture"===e.markup.tag&&e.markup.children.forEach(function(e){"source"!==e.tag&&"img"!==e.tag&&-1===r.indexOf(e.tag)&&r.push(e.tag)}),r.length&&(0,_error2["default"])(__filename,e.data,{tags:r.join(", ")})};var _error=require("../../util/error"),_error2=_interopRequireDefault(_error);
+"use strict";function _interopRequireDefault(e){return e&&e.__esModule?e:{"default":e}}Object.defineProperty(exports,"__esModule",{value:!0}),exports["default"]=function(e){var r=[];"picture"===e.markup.tag&&e.markup.children.forEach(function(e){-1===validChildren.indexOf(e.tag)&&-1===r.indexOf(e.tag)&&r.push(e.tag)}),r.length&&(0,_error2["default"])(__filename,e.data,{tags:r.join(", ")})};var _error=require("../../util/error"),_error2=_interopRequireDefault(_error),validChildren=["source","img","script","template"];
 
 }).call(this,"/src/linter/markup/extra.js")
 },{"../../util/error":31}],24:[function(require,module,exports){
