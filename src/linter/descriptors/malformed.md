@@ -7,7 +7,6 @@ The syntax of the descriptors is defined in the [spec](https://html.spec.whatwg.
 ```html
 <img src="200x100.jpg" srcset="200x100.jpg 1x">
 <img src="200x100.jpg" srcset="200x100.jpg 200w">
-<img src="200x100.jpg" srcset="200x100.jpg 200w 100h">
 ```
 
 ## Bad
@@ -15,6 +14,7 @@ The syntax of the descriptors is defined in the [spec](https://html.spec.whatwg.
 ```html
 <img src="200x100.jpg" srcset="200x100.jpg 1a">
 <img src="200x100.jpg" srcset="200x100.jpg 100h">
+<img src="200x100.jpg" srcset="200x100.jpg 200w 100h">
 <img src="200x100.jpg" srcset="200x100.jpg 1x 200w">
 <img src="200x100.jpg" srcset="200x100.jpg 200.0w">
 ```

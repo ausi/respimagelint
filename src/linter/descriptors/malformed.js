@@ -6,8 +6,6 @@ export default function(item) {
 			descriptor
 			&& !descriptor.match(/^\d+(?:\.\d+)?x$/)
 			&& !descriptor.match(/^\d+w$/)
-			&& !descriptor.match(/^\d+w\s+\d+h$/)
-			&& !descriptor.match(/^\d+h\s+\d+w$/)
 		) {
 			error(__filename, item, {
 				descriptor,
