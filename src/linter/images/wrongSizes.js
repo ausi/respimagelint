@@ -13,6 +13,11 @@ export default function(image) {
 
 		let imageWidth = image.dimensions[viewWidth];
 		const sourceMatched = [];
+
+		if (!imageWidth) {
+			return;
+		}
+
 		allSources(image).forEach((item, itemIndex) => {
 
 			if (sourceMatched[item.type || 'image/*']) {
