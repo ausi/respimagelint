@@ -6,7 +6,7 @@ The syntax of the descriptors is defined in the [spec](https://html.spec.whatwg.
 
 ```html
 <img src="200x100.jpg" srcset="200x100.jpg 1x">
-<img src="200x100.jpg" srcset="200x100.jpg 200w">
+<img src="200x100.jpg" srcset="200x100.jpg 200w" sizes="200px">
 ```
 
 ## Bad

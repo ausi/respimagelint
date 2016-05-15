@@ -3,13 +3,13 @@
 ## Good
 
 ```html
-<img src="200x100.jpg" srcset="200x100.jpg 200w">
+<img src="200x100.jpg" srcset="200x100.jpg 200w" sizes="200px">
 ```
 
 ## Bad
 
 ```html
-<img src="200x100.jpg" srcset="200x100.jpg 100w">
+<img src="200x100.jpg" srcset="200x100.jpg 100w" sizes="200px">
 ```
 
 ## Error template
