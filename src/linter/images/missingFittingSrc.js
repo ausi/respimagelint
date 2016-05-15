@@ -34,7 +34,10 @@ export default function(image) {
 			sourceMatched[item.type || 'image/*'] = true;
 
 			let srcs = item.srcset.map(({src}) => src);
-			if (item.src) {
+
+			if (item.src && !item.srcset.filter(({descriptor = '1x'}) =>
+				descriptor.substr(-1) !== 'x' || descriptor === '1x'
+			).length) {
 				srcs.push(item.src);
 			}
 
