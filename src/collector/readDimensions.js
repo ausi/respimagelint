@@ -38,12 +38,18 @@ export default function readDimensions(iframe, data, progress) {
 			referenceElement = undefined;
 		}
 
+		const initTime = Date.now();
+
 		function resizeStep(startTime = Date.now()) {
 
 			progress((width - minWidth) / (maxWidth - minWidth), width);
 
 			// Chrome (43) needs some time to update image sizes based on the sizes attribute
 			if (referenceElement && imageWidth(referenceElement) !== width) {
+				// Fix bug in Safari which never resizes the reference image
+				if (width === minWidth && Date.now() - initTime > 5000) {
+					referenceElement = undefined;
+				}
 				setTimeout(resizeStep, 0);
 				return;
 			}
