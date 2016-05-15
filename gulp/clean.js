@@ -3,7 +3,7 @@ import del from 'del';
 
 gulp.task('clean', cb => {
 	del([
-		'dist',
+		'dist/*.*',
 		'tmp',
 	], cb);
 });
