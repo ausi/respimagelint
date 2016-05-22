@@ -1,9 +1,9 @@
 import gulp from 'gulp';
 import livereload from 'gulp-livereload';
 
-gulp.task('watch', ['default'], () => {
+gulp.task('watch', gulp.series('default', function watching () {
 	livereload.listen();
-	gulp.watch('./src/**/*.*', ['default']);
-	gulp.watch('./pages/**/*.*', ['pages']);
-	gulp.watch('./styles/**/*.*', ['styles']);
-});
+	gulp.watch('./src/**/*.*', gulp.series('default'));
+	gulp.watch('./pages/**/*.*', gulp.series('pages'));
+	gulp.watch('./styles/**/*.*', gulp.series('styles'));
+}));

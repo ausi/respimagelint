@@ -14,7 +14,7 @@
     "del": "^2.1.0",
     "eslint": "^1.10.2",
     "glob": "^6.0.1",
-    "gulp": "~3.9.0",
+    "gulp": "gulpjs/gulp.git#4.0",
     "gulp-babel": "~6.1.1",
     "gulp-eslint": "^1.1.1",
     "gulp-livereload": "^3.8.0",

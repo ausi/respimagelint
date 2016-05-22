@@ -4,7 +4,6 @@ import path from 'path';
 import glob from 'glob';
 import marked from 'marked';
 import prism from 'prismjs';
-import getDocs from '../src/util/getDocs';
 
 let markdownConfig = {
 	gfm: true,
@@ -26,17 +25,17 @@ gulp.task('docs', callback => {
 		}
 
 		let rootDir = path.parse(__dirname).dir;
-		let data = {};
+		const docs = {};
 
 		files.forEach(file => {
 			let key = file.substr(rootDir.length + 1, file.length - 4 - rootDir.length).split(path.sep);
 			key.shift();
 			key.shift();
 			key = key.join('.');
-			data[key] = fs.readFileSync(file, 'utf-8');
+			docs[key] = fs.readFileSync(file, 'utf-8');
 		});
 
-		data = JSON.stringify(data);
+		const data = JSON.stringify(docs);
 
 		let tmpDir = path.join(rootDir, 'tmp');
 		if (!fs.existsSync(tmpDir)) {
@@ -80,6 +79,33 @@ gulp.task('docs', callback => {
 		fs.writeFileSync(path.join(__dirname, '..', 'dist', 'docs.html'), docsHtml);
 
 		callback();
+
+		function getDocs(key, section) {
+
+			let doc = docs[key];
+
+			if (!section) {
+				return doc;
+			}
+
+			if (section === 'title') {
+				return doc.split('\n')[0].substr(2);
+			}
+
+			if (section === 'text') {
+				doc = doc.split(/^#[^\n]*/);
+			}
+			else {
+				doc = doc.split('\n\n## ' + section + '\n\n');
+			}
+
+			if (doc.length < 2) {
+				return '';
+			}
+
+			return doc[1].split('\n\n##')[0].trim();
+
+		}
 
 	});
 });

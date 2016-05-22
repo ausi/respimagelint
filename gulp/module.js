@@ -4,7 +4,7 @@ import browserify from 'browserify';
 import source from 'vinyl-source-stream';
 import livereload from 'gulp-livereload';
 
-gulp.task('module:collector', ['docs'], () =>
+gulp.task('module:collector', () =>
 	browserify({
 		entries: './src/collector.js',
 		//debug: true,
@@ -18,7 +18,7 @@ gulp.task('module:collector', ['docs'], () =>
 		.pipe(livereload())
 );
 
-gulp.task('module:linter', ['docs'], () =>
+gulp.task('module:linter', () =>
 	browserify({
 		entries: './src/linter.js',
 		//debug: true,
@@ -46,7 +46,7 @@ gulp.task('module:store', () =>
 		.pipe(livereload())
 );
 
-gulp.task('module:test', ['docs'], () =>
+gulp.task('module:test', () =>
 	browserify({
 		entries: './src/test.js',
 		debug: true,

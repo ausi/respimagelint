@@ -1,9 +1,9 @@
 import gulp from 'gulp';
 import del from 'del';
 
-gulp.task('clean', cb => {
+gulp.task('clean', () =>
 	del([
 		'dist/*.*',
 		'tmp',
-	], cb);
-});
+	])
+);

@@ -7,7 +7,7 @@ import phantomjs from 'phantomjs';
 import lwip from 'lwip';
 import crypto from 'crypto';
 
-gulp.task('test', ['module:test'], callback => {
+gulp.task('test', gulp.series('docs', 'module:test', callback => {
 
 	createHtmlFile(htmlFile => {
 		let args = [
@@ -24,12 +24,11 @@ gulp.task('test', ['module:test'], callback => {
 			if (!data || !data.length) {
 				throw new Error('Bad output from PhantomJS');
 			}
-			reviewTestResult(data);
-			callback();
+			callback(reviewTestResult(data));
 		});
 	});
 
-});
+}));
 
 function reviewTestResult(data) {
 
@@ -86,8 +85,9 @@ function reviewTestResult(data) {
 	});
 
 	if (Object.keys(failed).length) {
-		throw new gutil.PluginError('test', {
-			message: 'Tests failed.\n' + JSON.stringify(failed, undefined, 2),
+		gutil.log(JSON.stringify(failed, undefined, 2));
+		return new gutil.PluginError('test', {
+			message: 'Tests failed.',
 		});
 	}
 
