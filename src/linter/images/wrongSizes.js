@@ -1,6 +1,9 @@
 import error from '../../util/error';
 import allSources from '../../util/allSources';
 import computeLength from '../../util/computeLength';
+import mediaToStringArray from '../../util/mediaToStringArray';
+import stripViewportQueries from '../../util/stripViewportQueries';
+import mediaMatchesViewport from '../../util/mediaMatchesViewport';
 
 const threshold = 0.05;
 const thresholdPx = 15;
@@ -12,7 +15,7 @@ export default function(image) {
 	Object.keys(image.dimensions).forEach(viewWidth => {
 
 		let imageWidth = image.dimensions[viewWidth];
-		const sourceMatched = [];
+		const sourceMatched = {};
 
 		if (!imageWidth) {
 			return;
@@ -20,20 +23,22 @@ export default function(image) {
 
 		allSources(image).forEach((item, itemIndex) => {
 
-			if (sourceMatched[item.type || 'image/*']) {
+			const categories = mediaToStringArray(
+				stripViewportQueries(item.media)
+			).map(
+				media => (item.type || 'image/*') + '|' + media
+			);
+
+			if (categories.reduce((result, category) => result || sourceMatched[category], false)) {
 				return;
 			}
 
-			if (item.media && ((
-				item.media['max-width']
-				&& viewWidth > computeLength(item.media['max-width'])
-			) || (
-				item.media['min-width']
-				&& viewWidth < computeLength(item.media['min-width'])
-			))) {
+			if (item.media && !mediaMatchesViewport(item.media, viewWidth)) {
 				return;
 			}
-			sourceMatched[item.type || 'image/*'] = true;
+			categories.forEach(category => {
+				sourceMatched[category] = true;
+			});
 
 			if (!item.sizes) {
 				return;
@@ -46,13 +51,7 @@ export default function(image) {
 					return;
 				}
 
-				if (media && ((
-					media['max-width']
-					&& viewWidth > computeLength(media['max-width'])
-				) || (
-					media['min-width']
-					&& viewWidth < computeLength(media['min-width'])
-				))) {
+				if (media && !mediaMatchesViewport(media, viewWidth)) {
 					return;
 				}
 				sizeMatched = true;
@@ -106,7 +105,7 @@ export default function(image) {
 		error(__filename, item, {
 			sizes: item.sizes.map(({size, media}) =>
 				(media ? (typeof media === 'object'
-					? '(' + Object.keys(media)[0] + ': ' + media[Object.keys(media)[0]] + ')'
+					? mediaToStringArray(media).join()
 					: media
 				) + ' ' : '') + size).join(', '),
 			viewWidth: firstItem.viewWidth,

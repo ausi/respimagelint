@@ -1,3 +1,5 @@
+import mqParser from 'css-mq-parser';
+
 export default function readData(image) {
 
 	let img = image.dom.img;
@@ -57,14 +59,10 @@ function parseMedia(attribute) {
 	if (!attribute) {
 		return undefined;
 	}
-	let matches = attribute
-		.trim()
-		.toLowerCase()
-		.match(/^\(\s*((?:max|min)-width):\s*([0-9a-z.]+)\s*\)$/i);
-	if (!matches) {
-		return attribute.trim();
+	try {
+		return mqParser(attribute.toLowerCase().replace(/\s+/g, ' '));
 	}
-	return {
-		[matches[1]]: matches[2],
-	};
+	catch(e) {
+		return attribute;
+	}
 }
