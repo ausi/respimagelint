@@ -12,6 +12,7 @@ export default function(media, viewport) {
 	if (!media || typeof media === 'string') {
 		return true;
 	}
+	viewport = parseFloat(viewport);
 	return !!media.filter(({type, expressions, inverse}) => {
 		let matches = true;
 		expressions.filter(
