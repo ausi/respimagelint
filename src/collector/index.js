@@ -14,7 +14,7 @@ export default function (document, includeDom = false) {
 		progressBar.value = done;
 		progressMessage.textContent = message;
 		setStyles(overlay, {opacity: done * 0.5 + 0.5});
-		document.title = Math.round(done * 100) + '% collecting data...';
+		document.title = Math.round(done * 100) + '% ' + message;
 	}
 
 	return Promise.resolve().then(() => {
