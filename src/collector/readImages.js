@@ -140,6 +140,9 @@ function readImage(image) {
 		if (extension === 'jpg') {
 			extension = 'jpeg';
 		}
+		if (extension === 'svg') {
+			extension = 'svg+xml';
+		}
 		image.type = extension ? 'image/' + extension : undefined;
 	}
 	image.hash = getImageHash(image.element);

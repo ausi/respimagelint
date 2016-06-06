@@ -26,7 +26,7 @@ export default function(image) {
 				return;
 			}
 
-			if (item.type === 'svg' || !imageWidth) {
+			if (item.type === 'image/svg+xml' || !imageWidth) {
 				return;
 			}
 
@@ -43,6 +43,11 @@ export default function(image) {
 				descriptor.substr(-1) !== 'x' || descriptor === '1x'
 			).length) {
 				srcs.push(item.src);
+			}
+
+			// Skip if one candidate is a vector image
+			if (srcs.map(src => image.images[src].type).indexOf('image/svg+xml') !== -1) {
+				return;
 			}
 
 			let nearbyWidth = srcs
