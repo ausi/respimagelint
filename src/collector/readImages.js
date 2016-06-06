@@ -1,6 +1,6 @@
 export default function readImages(document, data, progress) {
 
-	return new Promise(resolve => {
+	return Promise.resolve().then(() => {
 
 		let urls = [];
 
@@ -27,85 +27,90 @@ export default function readImages(document, data, progress) {
 		urls.forEach(url => {
 			let image = {
 				url: resolveUrl(document, url),
+				element: new Image(),
 			};
-			let element = new Image();
-			element.src = image.url;
-			image.element = element;
 			images[url] = image;
 		});
 
-		function step(startTime = Date.now()) {
+		return Promise.all(Object.keys(images).map(key => {
 
-			let currentImage;
+			const image = images[key];
 
-			Object.keys(images).forEach(key => {
-				if (images[key].element && images[key].element.complete) {
-					currentImage = images[key];
-				}
-			});
+			return loadImageAsBlob(image.url)
 
-			progress(Object.keys(images).reduce(
-				(count, key) => count + (images[key].element ? 0 : 1),
-				0
-			) / (Object.keys(images).length || 1), Object.keys(images).length, currentImage);
+				.catch(error => {
+					// Probably a CORS error
+					if (TypeError.prototype.isPrototypeOf(error)) {
+						return loadImageAsBlob('https://crossorigin.me/' + image.url);
+					}
+					throw error;
+				})
 
-			if (currentImage) {
-				readImage(currentImage);
-				if (currentImage.hash === null && currentImage.element.src.split('/')[2] !== 'crossorigin.me') {
-					currentImage.element = new Image();
-					currentImage.element.crossOrigin = 'anonymous';
-					currentImage.element.src = 'https://crossorigin.me/' + currentImage.url;
-				}
-				else {
-					delete currentImage.element;
-				}
-			}
-
-			if (Object.keys(images).reduce((done, key) => done && !images[key].element, true)) {
-				progress(1, Object.keys(images).length);
-				finish();
-				return;
-			}
-
-			if (!currentImage) {
-				setTimeout(step, 16);
-				return;
-			}
-
-			// Don’t force the main thread to go under 30 fps
-			if (Date.now() - startTime > 1000 / 30) {
-				setTimeout(step, 0);
-				return;
-			}
-
-			step(startTime);
-
-		}
-
-		step();
-
-		function finish() {
-
-			data.forEach(image => {
-				image.images = {};
-				if (image.data.img && image.data.img.src) {
-					image.images[image.data.img.src] = images[image.data.img.src];
-				}
-				if (image.data.img && image.data.img.srcset) {
-					image.data.img.srcset.forEach(({src}) => {
-						image.images[src] = images[src];
+				.then(blob => {
+					const loadedPromise = new Promise(resolve => {
+						image.element.onload = image.element.onerror = () => resolve();
 					});
-				}
-				image.data.sources.forEach(({srcset}) => {
-					srcset.forEach(({src}) => {
-						image.images[src] = images[src];
+					image.blob = blob;
+					image.element.src = URL.createObjectURL(blob);
+					return loadedPromise;
+				})
+
+				// Fall back to classc image loading
+				.catch(() => {
+					const loadedPromise = new Promise(resolve => {
+						image.element.onload = image.element.onerror = () => resolve();
 					});
+					image.element.src = image.url;
+					return loadedPromise;
+				})
+
+				.then(() => {
+					readImage(image);
+				})
+
+				// Fail silently
+				.catch(() => {})
+
+				.then(() => {
+					progress(
+						Object.keys(images).reduce(
+							(count, key) => count + (images[key].element ? 0 : 1),
+							0
+						) / (Object.keys(images).length || 1),
+						Object.keys(images).length,
+						image
+					);
+				})
+
+				// Clean data
+				.then(() => {
+					delete image.blob;
+					delete image.element;
+				})
+
+			;
+
+		})).then(() => images);
+
+	})
+	.then(images => {
+
+		data.forEach(image => {
+			image.images = {};
+			if (image.data.img && image.data.img.src) {
+				image.images[image.data.img.src] = images[image.data.img.src];
+			}
+			if (image.data.img && image.data.img.srcset) {
+				image.data.img.srcset.forEach(({src}) => {
+					image.images[src] = images[src];
+				});
+			}
+			image.data.sources.forEach(({srcset}) => {
+				srcset.forEach(({src}) => {
+					image.images[src] = images[src];
 				});
 			});
-
-			resolve();
-
-		}
+		});
 
 	});
 
@@ -118,15 +123,26 @@ function resolveUrl(document, url) {
 }
 
 function readImage(image) {
-	image.size = image.size || {
+	image.size = {
 		width: image.element.naturalWidth,
 		height: image.element.naturalHeight,
 	};
-	image.type = image.type || image.url.split('#')[0].split('?')[0].split('.').pop().toLowerCase();
-	if (image.type === 'jpg') {
-		image.type = 'jpeg';
+	if (image.blob && image.blob.type) {
+		image.type = image.blob.type;
 	}
-	image.hash = image.hash || getImageHash(image.element);
+	else {
+		let extension = image.url
+			.split('#')[0]
+			.split('?')[0]
+			.split('/').pop()
+			.split('.').pop()
+			.toLowerCase();
+		if (extension === 'jpg') {
+			extension = 'jpeg';
+		}
+		image.type = extension ? 'image/' + extension : undefined;
+	}
+	image.hash = getImageHash(image.element);
 }
 
 function getImageHash(image) {
@@ -161,10 +177,7 @@ function getImageHash(image) {
 		}
 	}
 	catch (e) {
-		// Check for security error because of tainted canvas
-		if (e.code === 18) {
-			data = null;
-		}
+		data = undefined;
 	}
 
 	return data;
@@ -209,4 +222,24 @@ function createCanvasCtx(size) {
 	const canvas = document.createElement('canvas');
 	canvas.width = canvas.height = size;
 	return canvas.getContext('2d');
+}
+
+function loadImageAsBlob(url) {
+	return Promise.resolve()
+	.then(() => fetch(url, {
+		headers: {
+			'Accept': 'image/*,*/*;q=0.8',
+		},
+	}))
+	.then(response => {
+		if (response.status >= 200 && response.status < 300) {
+			return response;
+		}
+		else {
+			let error = new Error(response.statusText);
+			error.response = response;
+			throw error;
+		}
+	})
+	.then(response => response.blob());
 }

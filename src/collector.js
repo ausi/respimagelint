@@ -1,3 +1,4 @@
+import 'whatwg-fetch';
 import collector from './collector/index';
 
 const script = document.getElementById('respimagelint-script');

@@ -32,7 +32,8 @@
     "run-sequence": "^1.1.0",
     "uglify-js": "^2.6.1",
     "uglifyify": "^3.0.1",
-    "vinyl-source-stream": "^1.1.0"
+    "vinyl-source-stream": "^1.1.0",
+    "whatwg-fetch": "^1.0.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
