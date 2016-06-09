@@ -82,10 +82,10 @@ export default function readDimensions(iframe, data, progress) {
 					skipSizeCheck = true;
 				}
 
-				// Trigger a height-resize for Firefox (46)
-				setStyles(iframe, {height: 'calc(100vh - 1px)'});
-				iframe.offsetHeight;
-				setStyles(iframe, {height: '100vh'});
+				// Trigger a reflow for Firefox (46)
+				setStyles(iframeDoc.body, {display: 'none'});
+				iframeDoc.body.offsetHeight;
+				setStyles(iframeDoc.body, {display: ''});
 
 				setTimeout(resizeStep, 0);
 				return;
