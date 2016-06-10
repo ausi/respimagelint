@@ -197,6 +197,8 @@ function buildErrorMessage(key, data, images) {
 
 	let message = getDocs(key, 'Error template');
 
+	const urls = [];
+
 	Object.keys(data).forEach(key => {
 		if (images[data[key]]) {
 			data[key + 'Url'] = images[data[key]].url;
@@ -204,7 +206,18 @@ function buildErrorMessage(key, data, images) {
 			data[key + 'Size'] = images[data[key]].size.width + 'x' + images[data[key]].size.height;
 			data[key + 'Width'] = images[data[key]].size.width;
 			data[key + 'Height'] = images[data[key]].size.height;
+			urls.push(data[key]);
 		}
+	});
+
+	const shortUrls = shortenUrls(urls);
+
+	urls.forEach((url, i) => {
+		Object.keys(data).forEach(key => {
+			if (images[data[key]] && data[key] === url && key.substr(-3) !== 'Url') {
+				data[key] = shortUrls[i];
+			}
+		});
 	});
 
 	Object.keys(data).forEach(key => {
@@ -219,4 +232,127 @@ function buildErrorMessage(key, data, images) {
 
 	return element;
 
+}
+
+function shortenUrl(url, maxLength) {
+
+	if (!url || url.length <= maxLength) {
+		return url;
+	}
+
+	url = url.replace(/^https?:\/\/[^/]+\//gi, '');
+	let query = '';
+
+	let prefix = '';
+	let suffix = '';
+
+	if (url.indexOf('?') !== -1) {
+		query = url.substr(url.indexOf('?'));
+		url = url.substr(0, url.indexOf('?'));
+	}
+
+	while (url.length + query.length >= maxLength && url.indexOf('/') !== -1) {
+		url = url.substr(url.indexOf('/') + 1);
+		prefix = '…/';
+	}
+
+	while (url.length + query.length >= maxLength && query.lastIndexOf('&') !== -1) {
+		query = query.substr(0, query.lastIndexOf('&'));
+		suffix = '…';
+	}
+
+	return prefix + url + query + suffix;
+}
+
+function shortenUrls(urls) {
+
+	const maxLength = 32;
+
+	if (!urls) {
+		return urls;
+	}
+
+	if (urls.length < 2) {
+		return urls.map(url => shortenUrl(url, maxLength));
+	}
+
+	let longestLength = urls.map(url => url.length).sort((a, b) => b - a)[0];
+	if (longestLength <= maxLength) {
+		return urls;
+	}
+
+	let prefix = '';
+	let done = false;
+	while (!done) {
+		prefix += urls[0][prefix.length];
+		for (let i = 0; i < urls.length; i++) {
+			if (urls[i].substr(0, prefix.length) !== prefix) {
+				prefix = prefix.substr(0, prefix.length - 1);
+				done = true;
+				break;
+			}
+		}
+	}
+	prefix = prefix.replace(/[^/]*$/gi, '');
+
+	urls = urls.map(url => url.substr(prefix.length));
+
+	longestLength -= prefix.length;
+	if (longestLength <= maxLength) {
+		return urls;
+	}
+
+	let suffix = '';
+	done = false;
+	while (!done) {
+		suffix = urls[0].substr(urls[0].length - suffix.length - 1, 1) + suffix;
+		for (let i = 0; i < urls.length; i++) {
+			if (urls[i].substr(urls[i].length - suffix.length) !== suffix) {
+				suffix = suffix.substr(1);
+				done = true;
+				break;
+			}
+		}
+	}
+	suffix = suffix.replace(/^[^?&]*/gi, '');
+
+	urls = urls.map(url => url.substr(0, url.length - suffix.length));
+
+	longestLength -= suffix.length;
+	if (longestLength <= maxLength) {
+		return urls;
+	}
+
+	const queryCounts = {};
+	urls.forEach(url => {
+		if (url.indexOf('?') === -1) {
+			return;
+		}
+		url.substr(url.indexOf('?') + 1).split('&')
+			.filter((val, index, arr) => arr.indexOf(val) === index)
+			.forEach(queryPart => {
+				queryCounts[queryPart] = (queryCounts[queryPart] || 0) + 1;
+			});
+	});
+
+	Object.keys(queryCounts).forEach(queryPart => {
+		if (queryCounts[queryPart] !== urls.length) {
+			return;
+		}
+		urls = urls.map(url => url.substr(0, url.indexOf('?') + 1)
+			+ url.substr(url.indexOf('?') + 1).split('&')
+				.map(val => val === queryPart ? '…' : val)
+				.join('&')
+		);
+	});
+
+	urls = urls.map(url =>
+		url.replace(/[?&]…(?:&…)*(?:&|$)/gi, '…')
+	);
+
+	return urls.map(url =>
+		(prefix.length ? '…/' : '')
+		+ url
+		+ (suffix.length ? suffix[0] + '…' : '')
+	);
 }
