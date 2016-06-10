@@ -1,3 +1,5 @@
+import jpegQuality from '../util/jpegQuality';
+
 export default function readImages(document, data, progress) {
 
 	return Promise.resolve().then(() => {
@@ -66,6 +68,7 @@ export default function readImages(document, data, progress) {
 
 				.then(() => {
 					readImage(image);
+					return readQuality(image);
 				})
 
 				// Fail silently
@@ -245,4 +248,49 @@ function loadImageAsBlob(url) {
 		}
 	})
 	.then(response => response.blob());
+}
+
+function readQuality(image) {
+	return Promise.resolve()
+	.then(() => {
+		return getQualityFromBlob(image.blob);
+	})
+	.catch((err) => {
+		return undefined;
+	})
+	.then(quality => {
+		image.quality = quality;
+	});
+}
+
+function getQualityFromBlob(blob) {
+	if (!blob) {
+		throw new Error('Missing blob');
+	}
+	if (blob.type === 'image/jpeg') {
+		return getJpegQualityFromBlob(blob);
+	}
+	if (blob.type === 'image/png' || blob.type === 'image/gif') {
+		return 100;
+	}
+	throw new Error('Unable to read quality from image type ' + blob.type);
+}
+
+function getJpegQualityFromBlob(blob) {
+	return readBlobAsArrayBuffer(blob).then(buffer => {
+		return jpegQuality(buffer);
+	});
+}
+
+function readBlobAsArrayBuffer(blob) {
+	var reader = new FileReader();
+	reader.readAsArrayBuffer(blob);
+	return new Promise(function(resolve, reject) {
+		reader.onload = function() {
+			resolve(reader.result);
+		};
+		reader.onerror = function() {
+			reject(reader.error);
+		};
+	});
 }
