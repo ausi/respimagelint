@@ -1,5 +1,7 @@
 import cloneDeep from 'lodash/cloneDeep';
 
+const viewportFeatures = ['width', 'height', 'aspect-ratio', 'orientation'];
+
 /**
  * Strips viewport queries that can be evaluated by mediaMatchesViewport()
  *
@@ -12,7 +14,7 @@ export default function(media) {
 	}
 	return cloneDeep(media).map(item => {
 		item.expressions = item.expressions.filter(
-			({feature}) => feature !== 'width'
+			({feature}) => viewportFeatures.indexOf(feature) === -1
 		);
 		if (!item.expressions.length && item.type === 'all' && item.inverse) {
 			item.inverse = false;

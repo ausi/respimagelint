@@ -58,4 +58,4 @@ The `sizes` attribute is a hint for browsers which should tell them how large th
 
 ## Error template
 
-The size of the image doesn’t match the `sizes` attribute `{{sizes}}`. At a viewport width of {{viewWidth}} the image was {{imageWidth}} pixels wide instead of the specified {{targetWidth}} ({{difference}} difference). The affected viewport widths are {{viewportRanges}}.
+The size of the image doesn’t match the `sizes` attribute `{{sizes}}`. At a viewport of {{viewport}} the image was {{imageWidth}} pixels wide instead of the specified {{targetWidth}} ({{difference}} difference). The affected viewports are {{viewportRanges}}.

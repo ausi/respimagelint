@@ -12,9 +12,9 @@ export default function(image) {
 
 	const errorItems = [];
 
-	Object.keys(image.dimensions).forEach(viewWidth => {
+	Object.keys(image.dimensions).forEach(viewport => {
 
-		let imageWidth = image.dimensions[viewWidth];
+		let imageWidth = image.dimensions[viewport];
 		const sourceMatched = {};
 
 		if (!imageWidth) {
@@ -33,7 +33,7 @@ export default function(image) {
 				return;
 			}
 
-			if (item.media && !mediaMatchesViewport(item.media, viewWidth)) {
+			if (item.media && !mediaMatchesViewport(item.media, viewport)) {
 				return;
 			}
 			categories.forEach(category => {
@@ -51,19 +51,19 @@ export default function(image) {
 					return;
 				}
 
-				if (media && !mediaMatchesViewport(media, viewWidth)) {
+				if (media && !mediaMatchesViewport(media, viewport)) {
 					return;
 				}
 				sizeMatched = true;
 
-				let targetWidth = computeLength(size, viewWidth);
+				let targetWidth = computeLength(size, viewport);
 				if (
 					imageWidth < targetWidth - (targetWidth * threshold) - thresholdPx
 					|| imageWidth > targetWidth + (targetWidth * threshold) + thresholdPx
 				) {
 					errorItems[itemIndex] = errorItems[itemIndex] || {};
-					errorItems[itemIndex][viewWidth] = {
-						viewWidth,
+					errorItems[itemIndex][viewport] = {
+						viewport,
 						targetWidth,
 						imageWidth,
 						size,
@@ -84,21 +84,22 @@ export default function(image) {
 
 		const firstItem = errorItems[itemIndex][
 			[
-				1280, 1440, 1000, 320, 480, 1920,
+				'1280x720', '1440x810', '1000x563', '320x180', '480x270', '1920x1080',
 				Object.keys(errorItems[itemIndex])[0],
 			].filter(
-				viewWidth => errorItems[itemIndex][viewWidth]
+				viewport => errorItems[itemIndex][viewport]
 			)[0]
 		];
 
 		const viewportRanges = [];
 		let lastViewWidth = 0;
 
-		Object.keys(errorItems[itemIndex]).forEach(viewWidth => {
+		Object.keys(errorItems[itemIndex]).forEach(viewport => {
+			let viewWidth = viewport.split('x')[0];
 			if (lastViewWidth < viewWidth - 10) {
-				viewportRanges.push([viewWidth, viewWidth]);
+				viewportRanges.push([viewport, viewport]);
 			}
-			viewportRanges[viewportRanges.length - 1][1] = viewWidth;
+			viewportRanges[viewportRanges.length - 1][1] = viewport;
 			lastViewWidth = viewWidth;
 		});
 
@@ -108,7 +109,7 @@ export default function(image) {
 					? mediaToStringArray(media).join()
 					: media
 				) + ' ' : '') + size).join(', '),
-			viewWidth: firstItem.viewWidth,
+			viewport: firstItem.viewport,
 			imageWidth: firstItem.imageWidth,
 			targetWidth: firstItem.targetWidth,
 			difference: Math.round((1 - (firstItem.imageWidth / firstItem.targetWidth)) * -100) + '%',

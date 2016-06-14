@@ -1,12 +1,22 @@
-export default function(length, viewWidth = 0) {
+export default function(length, viewport) {
 
 	if (!length) {
 		return 0;
 	}
 
+	if (typeof viewport === 'string') {
+		viewport = viewport.split('x', 2).map(parseFloat);
+	}
+
 	length = length.replace(
-		/\d*\.?\d+v(?:w|h|min|max)/gi,
-		match => parseFloat(match) * viewWidth / 100 + 'px'
+		/\d*\.?\d+v(w|h|min|max)/gi,
+		(match, unit) => parseFloat(match) * (
+			unit === 'w' ? viewport[0] :
+			unit === 'h' ? viewport[1] :
+			unit === 'min' ? Math.min(viewport[0], viewport[1]) :
+			unit === 'max' ? Math.max(viewport[0], viewport[1]) :
+			0
+		) / 100 + 'px'
 	);
 
 	if (length.match(/^\d*\.?\d+px$/)) {

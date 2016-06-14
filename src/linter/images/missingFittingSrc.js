@@ -10,9 +10,9 @@ export default function(image) {
 
 	const errorItems = [];
 
-	Object.keys(image.dimensions).forEach(viewWidth => {
+	Object.keys(image.dimensions).forEach(viewport => {
 
-		let imageWidth = image.dimensions[viewWidth];
+		let imageWidth = image.dimensions[viewport];
 		const sourceMatched = {};
 		allSources(image).forEach((item, itemIndex) => {
 
@@ -30,7 +30,7 @@ export default function(image) {
 				return;
 			}
 
-			if (item.media && !mediaMatchesViewport(item.media, viewWidth)) {
+			if (item.media && !mediaMatchesViewport(item.media, viewport)) {
 				return;
 			}
 			categories.forEach(category => {
@@ -74,8 +74,8 @@ export default function(image) {
 
 			if (distance > threshold) {
 				errorItems[itemIndex] = errorItems[itemIndex] || {};
-				errorItems[itemIndex][viewWidth] = {
-					viewWidth,
+				errorItems[itemIndex][viewport] = {
+					viewport,
 					imageWidth,
 					nearbyWidth,
 					distance: Math.round(distance * 100) + '%',
@@ -94,26 +94,27 @@ export default function(image) {
 
 		const firstItem = errorItems[itemIndex][
 			[
-				1280, 1440, 1000, 320, 480, 1920,
+				'1280x720', '1440x810', '1000x563', '320x180', '480x270', '1920x1080',
 				Object.keys(errorItems[itemIndex])[0],
 			].filter(
-				viewWidth => errorItems[itemIndex][viewWidth]
+				viewport => errorItems[itemIndex][viewport]
 			)[0]
 		];
 
 		const viewportRanges = [];
 		let lastViewWidth = 0;
 
-		Object.keys(errorItems[itemIndex]).forEach(viewWidth => {
+		Object.keys(errorItems[itemIndex]).forEach(viewport => {
+			let viewWidth = viewport.split('x')[0];
 			if (lastViewWidth < viewWidth - 10) {
-				viewportRanges.push([viewWidth, viewWidth]);
+				viewportRanges.push([viewport, viewport]);
 			}
-			viewportRanges[viewportRanges.length - 1][1] = viewWidth;
+			viewportRanges[viewportRanges.length - 1][1] = viewport;
 			lastViewWidth = viewWidth;
 		});
 
 		error(__filename, item, {
-			viewWidth: firstItem.viewWidth,
+			viewport: firstItem.viewport,
 			imageWidth: firstItem.imageWidth,
 			nearbyWidth: firstItem.nearbyWidth,
 			distance: firstItem.distance,

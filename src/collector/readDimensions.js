@@ -3,6 +3,7 @@ import setStyles from '../util/setStyles';
 const minWidth = 300;
 const maxWidth = 3000;
 const stepSize = 10;
+const aspectRatio = 16 / 9;
 
 export default function readDimensions(iframe, data, progress) {
 
@@ -13,6 +14,7 @@ export default function readDimensions(iframe, data, progress) {
 		let width = minWidth;
 		setStyles(iframe, {
 			width: width + 'px',
+			height: Math.round(width / aspectRatio) + 'px',
 		});
 		setStyles(iframeDoc.documentElement, {overflow: 'hidden'});
 		setStyles(iframeDoc.body, {overflow: 'hidden'});
@@ -101,14 +103,17 @@ export default function readDimensions(iframe, data, progress) {
 				return;
 			}
 
-			addDimensions(data, width);
+			addDimensions(data, width + 'x' + Math.round(width / aspectRatio));
 			width += stepSize;
 			if (width > maxWidth) {
 				progress(1, maxWidth);
 				resolve();
 				return;
 			}
-			setStyles(iframe, {width: width + 'px'});
+			setStyles(iframe, {
+				width: width + 'px',
+				height: Math.round(width / aspectRatio) + 'px',
+			});
 
 			// Don’t force the main thread to go under 30 fps
 			if (Date.now() - startTime > 1000 / 30) {
@@ -125,16 +130,16 @@ export default function readDimensions(iframe, data, progress) {
 
 }
 
-function addDimensions(data, width) {
-	data.forEach(image => addDimension(image, width));
+function addDimensions(data, viewport) {
+	data.forEach(image => addDimension(image, viewport));
 }
 
-function addDimension(image, width) {
+function addDimension(image, viewport) {
 	image.dimensions = image.dimensions || {};
 	if (!image.dom.img) {
 		return;
 	}
-	image.dimensions[width] = imageWidth(image.dom.img);
+	image.dimensions[viewport] = imageWidth(image.dom.img);
 }
 
 function imageWidth(img) {
