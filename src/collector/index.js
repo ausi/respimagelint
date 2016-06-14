@@ -120,8 +120,8 @@ export default function (document, includeDom = false) {
 			.map(readData)
 			.map(readMarkup);
 
-		return readDimensions(iframe, data, (progressDone, width) => {
-			progress(0.1 + (0.8 * progressDone), 'Resizing to ' + width);
+		return readDimensions(iframe, data, (progressDone, viewport) => {
+			progress(0.1 + (0.8 * progressDone), 'Resizing to ' + viewport);
 		});
 
 	}).then(() => {

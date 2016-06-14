@@ -94,24 +94,40 @@ export default function(image) {
 
 		const firstItem = errorItems[itemIndex][
 			[
-				'1280x720', '1440x810', '1000x563', '320x180', '480x270', '1920x1080',
+				'1280x720', '1440x810', '1000x563', '320x427', '480x270', '1920x1080',
 				Object.keys(errorItems[itemIndex])[0],
 			].filter(
 				viewport => errorItems[itemIndex][viewport]
 			)[0]
 		];
 
-		const viewportRanges = [];
+		let viewportRanges = [];
 		let lastViewWidth = 0;
 
 		Object.keys(errorItems[itemIndex]).forEach(viewport => {
 			let viewWidth = viewport.split('x')[0];
-			if (lastViewWidth < viewWidth - 10) {
+			if (Math.abs(lastViewWidth - viewWidth) > 20) {
 				viewportRanges.push([viewport, viewport]);
 			}
 			viewportRanges[viewportRanges.length - 1][1] = viewport;
 			lastViewWidth = viewWidth;
 		});
+
+		for (let i = 0; i < viewportRanges.length; i++) {
+			for (let j = i + 1; j < viewportRanges.length; j++) {
+				if (
+					viewportRanges[i]
+					&& viewportRanges[j]
+					&& viewportRanges[i][0].split('x')[0] === viewportRanges[j][0].split('x')[0]
+					&& viewportRanges[i][1].split('x')[0] === viewportRanges[j][1].split('x')[0]
+				) {
+					viewportRanges[i][1] = viewportRanges[j][1];
+					viewportRanges[j] = undefined;
+				}
+			}
+		}
+
+		viewportRanges = viewportRanges.filter(Boolean);
 
 		error(__filename, item, {
 			viewport: firstItem.viewport,

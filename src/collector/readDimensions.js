@@ -2,8 +2,8 @@ import setStyles from '../util/setStyles';
 
 const minWidth = 300;
 const maxWidth = 3000;
-const stepSize = 10;
-const aspectRatio = 16 / 9;
+const stepSize = 20;
+const aspectRatios = [16 / 9, 3 / 4];
 
 export default function readDimensions(iframe, data, progress) {
 
@@ -11,10 +11,13 @@ export default function readDimensions(iframe, data, progress) {
 
 		const iframeDoc = iframe.contentWindow.document;
 
+		let aspectRatioIndex = 0;
+		let aspectRatio = aspectRatios[aspectRatioIndex];
 		let width = minWidth;
+		let height = Math.round(width / aspectRatio);
 		setStyles(iframe, {
 			width: width + 'px',
-			height: Math.round(width / aspectRatio) + 'px',
+			height: height + 'px',
 		});
 		setStyles(iframeDoc.documentElement, {overflow: 'hidden'});
 		setStyles(iframeDoc.body, {overflow: 'hidden'});
@@ -67,7 +70,12 @@ export default function readDimensions(iframe, data, progress) {
 
 		function resizeStep(startTime = Date.now()) {
 
-			progress((width - minWidth) / (maxWidth - minWidth), width);
+			progress((
+				(width - minWidth)
+				/ (maxWidth - minWidth)
+				/ aspectRatios.length
+				+ (aspectRatioIndex / aspectRatios.length)
+			), width + 'x' + height);
 
 			let referenceWidth = width;
 
@@ -103,16 +111,23 @@ export default function readDimensions(iframe, data, progress) {
 				return;
 			}
 
-			addDimensions(data, width + 'x' + Math.round(width / aspectRatio));
+			addDimensions(data, width + 'x' + height);
 			width += stepSize;
+			height = Math.round(width / aspectRatio);
 			if (width > maxWidth) {
-				progress(1, maxWidth);
-				resolve();
-				return;
+				aspectRatioIndex++;
+				if (!aspectRatios[aspectRatioIndex]) {
+					progress(1, maxWidth + 'x' + Math.round(maxWidth / aspectRatio));
+					resolve();
+					return;
+				}
+				aspectRatio = aspectRatios[aspectRatioIndex];
+				width = minWidth;
+				height = Math.round(width / aspectRatio);
 			}
 			setStyles(iframe, {
 				width: width + 'px',
-				height: Math.round(width / aspectRatio) + 'px',
+				height: height + 'px',
 			});
 
 			// Don’t force the main thread to go under 30 fps
