@@ -1,5 +1,6 @@
 import 'babel-polyfill';
 import find from './find';
+import checkLazyImages from './checkLazyImages';
 import readData from './readData';
 import readMarkup from './readMarkup';
 import readDimensions from './readDimensions';
@@ -111,6 +112,12 @@ export default function (document, includeDom = false) {
 		progress(0.05, 'Loading page into frame...');
 
 		return promise;
+
+	}).then(() => {
+
+		progress(0.075, 'Check for lazy loading images');
+
+		return checkLazyImages(iframe);
 
 	}).then(() => {
 
