@@ -6,10 +6,7 @@ const scriptBase = script.src.split('?')[0].replace(/[^/]+$/, '');
 
 collector(document).then(data => {
 
-	data = {
-		href: document.location.href,
-		data,
-	};
+	data.href = document.location.href;
 
 	return new Promise(resolve => {
 

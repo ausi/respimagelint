@@ -5,7 +5,7 @@ import markup from './markup';
 
 export default function(data) {
 
-	data.forEach(image => {
+	data.data.forEach(image => {
 		descriptors(image);
 		fallbacks(image);
 		images(image);

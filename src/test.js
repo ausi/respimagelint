@@ -3,7 +3,7 @@ import linter from './linter/index';
 
 collector(document, true)
 	.then(data => {
-		data.forEach(image => {
+		data.data.forEach(image => {
 			for (
 				var node = image.dom.img || image.dom.sources[0];
 				node;
@@ -23,5 +23,5 @@ collector(document, true)
 	})
 	.then(linter)
 	.then(data => {
-		window.callPhantom(data);
+		window.callPhantom(data.data);
 	});

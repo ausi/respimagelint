@@ -1,6 +1,7 @@
 import 'babel-polyfill';
 import find from './find';
 import checkLazyImages from './checkLazyImages';
+import readMediaQueries from './readMediaQueries';
 import readData from './readData';
 import readMarkup from './readMarkup';
 import readDimensions from './readDimensions';
@@ -9,7 +10,8 @@ import setStyles from '../util/setStyles';
 
 export default function (document, includeDom = false) {
 
-	let iframe, data, progressBar, progressMessage, overlay;
+	let iframe, progressBar, progressMessage, overlay;
+	let data = {};
 
 	function progress(done, message) {
 		progressBar.value = done;
@@ -121,13 +123,19 @@ export default function (document, includeDom = false) {
 
 	}).then(() => {
 
+		progress(0.09, 'Read media queries');
+
+		return readMediaQueries(iframe.contentWindow.document, data);
+
+	}).then(() => {
+
 		progress(0.1, 'Resizing');
 
-		data = find(iframe.contentWindow.document)
+		data.data = find(iframe.contentWindow.document)
 			.map(readData)
 			.map(readMarkup);
 
-		return readDimensions(iframe, data, (progressDone, viewport) => {
+		return readDimensions(iframe, data.data, (progressDone, viewport) => {
 			progress(0.1 + (0.8 * progressDone), 'Resizing to ' + viewport);
 		});
 
@@ -135,7 +143,7 @@ export default function (document, includeDom = false) {
 
 		progress(0.9, 'Reading image');
 
-		return readImages(iframe.contentWindow.document, data, (progressDone, count, image) => {
+		return readImages(iframe.contentWindow.document, data.data, (progressDone, count, image) => {
 			if (image) {
 				progress(0.9 + (0.1 * progressDone), 'Reading image ' + Math.round(progressDone * count) + ' of ' + count + '\n' + image.url);
 			}
@@ -146,7 +154,7 @@ export default function (document, includeDom = false) {
 		progress(1, 'Done');
 
 		if (!includeDom) {
-			data.forEach(image => {
+			data.data.forEach(image => {
 				delete image.dom;
 			});
 		}
