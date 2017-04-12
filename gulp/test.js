@@ -3,7 +3,7 @@ import gutil from 'gulp-util';
 import fs from 'fs';
 import path from 'path';
 import childProcess from 'child_process';
-import phantomjs from 'phantomjs';
+import phantomjs from 'phantomjs-prebuilt';
 import lwip from 'lwip';
 import crypto from 'crypto';
 
