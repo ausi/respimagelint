@@ -15,4 +15,6 @@
 
 ## Error template
 
-Descriptor `{{descriptor}}` is used but the `sizes` attribute is missing.
+Descriptors `{{descriptors}}` are used but the `sizes` attribute is missing.
+
+Try using `sizes="{{sizesSuggestion}}"`

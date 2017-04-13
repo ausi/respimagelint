@@ -4,11 +4,12 @@ import computeLength from '../../util/computeLength';
 import mediaToStringArray from '../../util/mediaToStringArray';
 import stripViewportQueries from '../../util/stripViewportQueries';
 import mediaMatchesViewport from '../../util/mediaMatchesViewport';
+import computeSizesAttribute from '../../util/computeSizesAttribute';
 
 const threshold = 0.05;
 const thresholdPx = 15;
 
-export default function(image) {
+export default function(image, mediaQueries) {
 
 	const errorItems = [];
 
@@ -130,6 +131,7 @@ export default function(image) {
 			targetWidth: firstItem.targetWidth,
 			difference: Math.round((1 - (firstItem.imageWidth / firstItem.targetWidth)) * -100) + '%',
 			viewportRanges: viewportRanges.map(range => range[0] === range[1] ? range[0] : range.join('-')).join(', '),
+			sizesSuggestion: computeSizesAttribute(image.dimensions, mediaQueries.bySize),
 		});
 
 	});

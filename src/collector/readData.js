@@ -1,4 +1,4 @@
-import mqParser from 'css-mq-parser';
+import parseMedia from '../util/parseMedia';
 
 export default function readData(image) {
 
@@ -53,16 +53,4 @@ function parseSizes(attribute) {
 		});
 		return {size, media};
 	});
-}
-
-function parseMedia(attribute) {
-	if (!attribute) {
-		return undefined;
-	}
-	try {
-		return mqParser(attribute.toLowerCase().replace(/\s+/g, ' '));
-	}
-	catch(e) {
-		return attribute;
-	}
 }

@@ -8,6 +8,10 @@ export default function(length, viewport) {
 		viewport = viewport.split('x', 2).map(parseFloat);
 	}
 
+	if (!viewport || !viewport[0] || !viewport[1]) {
+		viewport = [0, 0];
+	}
+
 	length = length.replace(
 		/\d*\.?\d+v(w|h|min|max)/gi,
 		(match, unit) => parseFloat(match) * (
