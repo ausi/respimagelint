@@ -1,4 +1,7 @@
-import 'babel-polyfill';
+if (!global._babelPolyfill) {
+	require('babel-polyfill');
+}
+
 import find from './find';
 import checkLazyImages from './checkLazyImages';
 import readMediaQueries from './readMediaQueries';
