@@ -39,7 +39,7 @@ gulp.task('docs', callback => {
 
 		let tmpDir = path.join(rootDir, 'tmp');
 		if (!fs.existsSync(tmpDir)) {
-			fs.mkdir(tmpDir);
+			fs.mkdirSync(tmpDir);
 		}
 
 		fs.writeFileSync(path.join(tmpDir, 'docs.json'), data);
