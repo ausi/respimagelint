@@ -9,7 +9,6 @@ let markdownConfig = {
 	gfm: true,
 	tables: true,
 	breaks: true,
-	sanitize: true,
 	highlight: (code, lang) => {
 		if (lang && prism.languages[lang]) {
 			return prism.highlight(code, prism.languages[lang], lang);
