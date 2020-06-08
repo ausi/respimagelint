@@ -43,7 +43,7 @@ export default function readImages(document, data, progress) {
 				.catch(error => {
 					// Probably a CORS error
 					if (TypeError.prototype.isPrototypeOf(error)) {
-						return loadImageAsBlob('https://crossorigin.me/' + image.url);
+						return loadImageAsBlob('https://cors-anywhere.herokuapp.com/' + image.url);
 					}
 					throw error;
 				})
@@ -235,6 +235,7 @@ function loadImageAsBlob(url) {
 	.then(() => fetch(url, {
 		headers: {
 			'Accept': 'image/*,*/*;q=0.8',
+			'X-Requested-With': 'XMLHttpRequest',
 		},
 	}))
 	.then(response => {
