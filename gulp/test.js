@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import childProcess from 'child_process';
 import phantomjs from 'phantomjs-prebuilt';
-import lwip from 'lwip';
+import lwip from '@randy.tarampi/lwip';
 import crypto from 'crypto';
 
 gulp.task('test', gulp.series('docs', 'module:test', callback => {
