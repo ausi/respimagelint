@@ -27,7 +27,7 @@
     "lodash": "^4.12.0",
     "marked": "^1.1.0",
     "phantomjs-prebuilt": "^2.1.7",
-    "prismjs": "^1.2.0",
+    "prismjs": "^1.21.0",
     "require-dir": "^0.3.0",
     "run-sequence": "^1.1.0",
     "uglify-js": "^2.6.1",
