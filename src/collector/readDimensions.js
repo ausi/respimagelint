@@ -107,6 +107,12 @@ export default function readDimensions(iframe, data, progress) {
 				true
 			);
 			if (!allLoaded) {
+				data.map(image => {
+					if (image.dom.img) {
+						image.dom.img.loading = 'eager';
+						image.dom.img.decoding = 'sync';
+					}
+				});
 				setTimeout(resizeStep, 0);
 				return;
 			}
