@@ -40,14 +40,6 @@ export default function readImages(document, data, progress) {
 
 			return loadImageAsBlob(image.url)
 
-				.catch(error => {
-					// Probably a CORS error
-					if (TypeError.prototype.isPrototypeOf(error)) {
-						return loadImageAsBlob('https://cors-anywhere.herokuapp.com/' + image.url);
-					}
-					throw error;
-				})
-
 				.then(blob => {
 					const loadedPromise = new Promise(resolve => {
 						image.element.onload = image.element.onerror = () => resolve();
