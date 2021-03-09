@@ -45,6 +45,7 @@ samp {
 html {
   box-sizing: border-box;
   -moz-tab-size: 4;
+    -o-tab-size: 4;
        tab-size: 4;
   font: 87.5%/1.5 sans-serif;
   letter-spacing: 0.02em;
@@ -125,6 +126,7 @@ pre[class*="language-"] {
   word-wrap: normal;
   line-height: 1.5;
   -moz-tab-size: 4;
+  -o-tab-size: 4;
   tab-size: 4;
   -webkit-hyphens: none;
   -ms-hyphens: none;
@@ -151,7 +153,7 @@ pre[class*="language-"] {
 .token.prolog,
 .token.doctype,
 .token.cdata {
-  color: slategray; }
+  color: #8292a2; }
 
 .token.punctuation {
   color: #f8f8f2; }
