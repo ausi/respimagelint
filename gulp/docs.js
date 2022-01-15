@@ -2,7 +2,7 @@ import gulp from 'gulp';
 import fs from 'fs';
 import path from 'path';
 import glob from 'glob';
-import marked from 'marked';
+import { marked } from 'marked';
 import prism from 'prismjs';
 
 let markdownConfig = {

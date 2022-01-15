@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import childProcess from 'child_process';
 import phantomjs from 'phantomjs-prebuilt';
-import lwip from '@randy.tarampi/lwip';
+//import lwip from '@randy.tarampi/lwip';
 import crypto from 'crypto';
 
 gulp.task('test', gulp.series('docs', 'module:test', callback => {
@@ -183,6 +183,7 @@ function createImage(url, tmpDir, callback) {
 		color = crypto.createHash('md5').update(name).digest('hex').substr(0, 6);
 	}
 
+	/*
 	lwip.create(size[0], size[1], [
 		parseInt(color.substr(0, 2), 16),
 		parseInt(color.substr(2, 2), 16),
@@ -198,6 +199,9 @@ function createImage(url, tmpDir, callback) {
 			callback();
 		});
 	});
+	*/
+
+	callback();
 }
 
 function regExpMatchAll(regexp, str) {

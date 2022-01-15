@@ -1,4 +1,4 @@
-import marked from 'marked';
+import { marked } from 'marked';
 import prism from 'prismjs';
 import getDocs from './util/getDocs';
 import allSources from './util/allSources';

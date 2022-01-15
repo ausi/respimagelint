@@ -1,13 +1,15 @@
 import gulp from 'gulp';
-import sass from 'gulp-sass';
+import sassDart from 'sass';
+import sassGulp from 'gulp-sass';
 import postcss from 'gulp-postcss';
 import autoprefixer from 'autoprefixer';
 import livereload from 'gulp-livereload';
 
+const sass = sassGulp(sassDart);
 
 gulp.task('styles', () =>
 	gulp.src('./styles/*.sass')
-		.pipe(sass().on('error', sass.logError))
+		.pipe(sass.sync().on('error', sass.logError))
 		.pipe(postcss([
 			autoprefixer(),
 		]))
