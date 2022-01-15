@@ -25,7 +25,7 @@
     "gulp-sass": "^4.1.0",
     "gulp-util": "^3.0.6",
     "lodash": "^4.17.19",
-    "marked": "^2.0.1",
+    "marked": "^4.0.10",
     "phantomjs-prebuilt": "^2.1.7",
     "prismjs": "^1.23.0",
     "require-dir": "^0.3.0",
