@@ -16,10 +16,19 @@ export default function (data) {
 	link.href = link.textContent = data.href;
 	headline.appendChild(link);
 
-	data.data.map((image, index) => reportImage(image, index))
-		.forEach(imageReport => {
+	const reports = data.data.map((image, index) => reportImage(image, index));
+
+	reports.forEach(imageReport => {
+		if (!imageReport.classList.contains('-passed')) {
 			report.appendChild(imageReport)
-		});
+		}
+	});
+
+	reports.forEach(imageReport => {
+		if (imageReport.classList.contains('-passed')) {
+			report.appendChild(imageReport)
+		}
+	});
 
 	if (!data.data.length) {
 		let text = document.createElement('p');
