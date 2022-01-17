@@ -142,11 +142,11 @@ export default function(image) {
 		const imageSrc = item.srcset[0] ? item.srcset[0].src : item.src;
 
 		error(__filename, item, {
-			viewport: firstItem.viewport,
+			viewport: firstItem.viewport.replace(/x/g, '×'),
 			imageWidth: firstItem.imageWidth,
 			nearbyWidth: firstItem.nearbyWidth,
 			distance: firstItem.distance,
-			viewportRanges: viewportRanges.map(range => range[0] === range[1] ? range[0] : range.join('-')).join(', '),
+			viewportRanges: viewportRanges.map(range => range[0] === range[1] ? range[0] : range.join('–')).join(', ').replace(/x/g, '×'),
 			recommendation: '<br>' + buildRecommendation(dimensionsBySource[itemIndex], image.images[imageSrc] ? image.images[imageSrc].size : {}, Object.keys(viewportWidths).length),
 			recommendationContext: image.data.img === item ? '<code>&lt;img srcset=&quot;…&quot;&gt;</code>' : 'the ' + humanReadableIndex(itemIndex) + ' <code>&lt;source srcset=&quot;…&quot;&gt;</code>',
 		});
