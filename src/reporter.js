@@ -152,13 +152,6 @@ function buildErrors(data, images) {
 		});
 	}
 
-	if (data.img && data.img.errors) {
-		data.img.errors.forEach(error => {
-			errors[error.key] = errors[error.key] || [];
-			errors[error.key].push(error);
-		});
-	}
-
 	data.sources.forEach(source => {
 		if (source.errors) {
 			source.errors.forEach(error => {
@@ -167,6 +160,13 @@ function buildErrors(data, images) {
 			});
 		}
 	});
+
+	if (data.img && data.img.errors) {
+		data.img.errors.forEach(error => {
+			errors[error.key] = errors[error.key] || [];
+			errors[error.key].push(error);
+		});
+	}
 
 	return Object.keys(errors).map(key => buildError(key, errors[key], images));
 }

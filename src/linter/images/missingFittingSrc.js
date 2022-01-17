@@ -5,12 +5,18 @@ import stripViewportQueries from '../../util/stripViewportQueries';
 import mediaMatchesViewport from '../../util/mediaMatchesViewport';
 
 const threshold = 0.5;
+const megapixelThreshold = 0.5;
+const megapixelGap = 0.75;
 
 export default function(image) {
 
 	const errorItems = [];
+	const dimensionsBySource = [];
+	const viewportWidths = {}
 
 	Object.keys(image.dimensions).forEach(viewport => {
+
+		viewportWidths[viewport.split('x')[0]] = true;
 
 		let imageWidth = image.dimensions[viewport];
 		const sourceMatched = {};
@@ -36,6 +42,8 @@ export default function(image) {
 			categories.forEach(category => {
 				sourceMatched[category] = true;
 			});
+			dimensionsBySource[itemIndex] = dimensionsBySource[itemIndex] || {};
+			dimensionsBySource[itemIndex][viewport] = imageWidth;
 
 			let srcs = item.srcset.map(({src}) => src);
 
@@ -129,14 +137,102 @@ export default function(image) {
 
 		viewportRanges = viewportRanges.filter(Boolean);
 
+		const imageSrc = item.srcset[0] ? item.srcset[0].src : item.src;
+
 		error(__filename, item, {
 			viewport: firstItem.viewport,
 			imageWidth: firstItem.imageWidth,
 			nearbyWidth: firstItem.nearbyWidth,
 			distance: firstItem.distance,
 			viewportRanges: viewportRanges.map(range => range[0] === range[1] ? range[0] : range.join('-')).join(', '),
+			recommendation: '<br>' + buildRecommendation(dimensionsBySource[itemIndex], image.images[imageSrc] ? image.images[imageSrc].size : {}, Object.keys(viewportWidths).length),
+			recommendationContext: image.data.img === item ? '<code>&lt;img srcset=&quot;…&quot;&gt;</code>' : 'the ' + humanReadableIndex(itemIndex) + ' <code>&lt;source srcset=&quot;…&quot;&gt;</code>',
 		});
+
+		console.log(image);
 
 	});
 
+}
+
+function humanReadableIndex(index) {
+	index++;
+	const ordinal = new Intl.PluralRules('en-US', { type: 'ordinal' }).select(index);
+	const suffixes = {
+		one: 'st',
+		two: 'nd',
+		few: 'rd',
+		other: 'th',
+	};
+
+	return index + suffixes[ordinal];
+}
+
+function buildRecommendation(dimensions, size, viewportsCount) {
+	const ratio = (size.width && size.height) ? size.height / size.width : 1;
+	return calculateSuggestedDimenions(dimensions, ratio, viewportsCount).map(width => width + '<small>×' + Math.round(width * ratio) + '</small>').join(', ');
+}
+
+function calculateSuggestedDimenions(dimensions, ratio, viewportsCount) {
+	const maxWidth = Math.round(Math.max(...Object.values(dimensions)));
+	const minWidth = Math.round(Math.min(...Object.values(dimensions).filter(width => width > 0)));
+	const fixedWidths = [];
+	const widthCounts = {};
+
+	Object.values(dimensions).forEach(width => {
+		widthCounts[width] = widthCounts[width] || 0;
+		widthCounts[width]++;
+	});
+
+	// If the image size is fixed (not fluid) for some viewports, these exact dimensions (including retina versions) should be used
+	Object.keys(widthCounts).forEach(width => {
+		width = parseInt(width);
+		if (widthCounts[width] > viewportsCount / 8 && !fixedWidths.includes(width)) {
+			fixedWidths.push(width);
+			fixedWidths.push(width * 2);
+		}
+	});
+
+	fixedWidths.sort((a, b) => a < b ? -1 : 1);
+	const allWidths = [];
+
+	if (!fixedWidths[0] || getMegapixels(minWidth) < getMegapixels(fixedWidths[0]) - megapixelThreshold) {
+		fixedWidths.unshift(minWidth);
+	}
+
+	if (getMegapixels(maxWidth) > getMegapixels(fixedWidths[fixedWidths.length - 1]) + megapixelThreshold) {
+		fixedWidths.push(maxWidth);
+	}
+
+	if (getMegapixels(maxWidth * 2) > getMegapixels(fixedWidths[fixedWidths.length - 1]) + megapixelThreshold) {
+		fixedWidths.push(maxWidth * 2);
+	}
+
+	console.log(fixedWidths);
+
+	fixedWidths.forEach((width, index) => {
+		const previousWidth = allWidths[allWidths.length - 1];
+		const gap = previousWidth && getMegapixels(width) - getMegapixels(previousWidth);
+		if (gap < megapixelThreshold) {
+			allWidths.pop();
+		}
+		else if (gap > megapixelGap) {
+			const gapSize = gap / Math.ceil(gap / megapixelGap);
+			let nextWidth = previousWidth;
+			while (width - 10 > (nextWidth = getWidth(getMegapixels(nextWidth) + gapSize))) {
+				allWidths.push(nextWidth);
+			}
+		}
+		allWidths.push(width);
+	});
+
+	return allWidths;
+
+	function getMegapixels(width) {
+		return width * width * ratio / 1000000;
+	}
+
+	function getWidth(megapixels) {
+		return Math.round(Math.sqrt(megapixels * 1000000 / ratio));
+	}
 }
