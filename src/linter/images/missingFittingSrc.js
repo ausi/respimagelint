@@ -149,8 +149,6 @@ export default function(image) {
 			recommendationContext: image.data.img === item ? '<code>&lt;img srcset=&quot;…&quot;&gt;</code>' : 'the ' + humanReadableIndex(itemIndex) + ' <code>&lt;source srcset=&quot;…&quot;&gt;</code>',
 		});
 
-		console.log(image);
-
 	});
 
 }
@@ -207,8 +205,6 @@ function calculateSuggestedDimenions(dimensions, ratio, viewportsCount) {
 	if (getMegapixels(maxWidth * 2) > getMegapixels(fixedWidths[fixedWidths.length - 1]) + megapixelThreshold) {
 		fixedWidths.push(maxWidth * 2);
 	}
-
-	console.log(fixedWidths);
 
 	fixedWidths.forEach((width, index) => {
 		const previousWidth = allWidths[allWidths.length - 1];
