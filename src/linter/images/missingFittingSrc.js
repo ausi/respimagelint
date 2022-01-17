@@ -7,6 +7,8 @@ import mediaMatchesViewport from '../../util/mediaMatchesViewport';
 const threshold = 0.5;
 const megapixelThreshold = 0.5;
 const megapixelGap = 0.75;
+const recommendedMinWidth = 256;
+const recommendedMaxWidth = 2048;
 
 export default function(image) {
 
@@ -172,8 +174,8 @@ function buildRecommendation(dimensions, size, viewportsCount) {
 }
 
 function calculateSuggestedDimenions(dimensions, ratio, viewportsCount) {
-	const maxWidth = Math.round(Math.max(...Object.values(dimensions)));
-	const minWidth = Math.round(Math.min(...Object.values(dimensions).filter(width => width > 0)));
+	const maxWidth = Math.min(recommendedMaxWidth, Math.round(Math.max(...Object.values(dimensions))));
+	const minWidth = Math.max(recommendedMinWidth, Math.round(Math.min(...Object.values(dimensions).filter(width => width > 0))));
 	const fixedWidths = [];
 	const widthCounts = {};
 
@@ -185,9 +187,15 @@ function calculateSuggestedDimenions(dimensions, ratio, viewportsCount) {
 	// If the image size is fixed (not fluid) for some viewports, these exact dimensions (including retina versions) should be used
 	Object.keys(widthCounts).forEach(width => {
 		width = parseInt(width);
-		if (widthCounts[width] > viewportsCount / 8 && !fixedWidths.includes(width)) {
-			fixedWidths.push(width);
-			fixedWidths.push(width * 2);
+		if (widthCounts[width] > viewportsCount / 8) {
+			[
+				Math.max(recommendedMinWidth, Math.min(recommendedMaxWidth, width)),
+				Math.max(recommendedMinWidth, Math.min(recommendedMaxWidth, width * 2)),
+			].forEach(width => {
+				if (!fixedWidths.includes(width)) {
+					fixedWidths.push(width);
+				}
+			});
 		}
 	});
 
@@ -202,8 +210,8 @@ function calculateSuggestedDimenions(dimensions, ratio, viewportsCount) {
 		fixedWidths.push(maxWidth);
 	}
 
-	if (getMegapixels(maxWidth * 2) > getMegapixels(fixedWidths[fixedWidths.length - 1]) + megapixelThreshold) {
-		fixedWidths.push(maxWidth * 2);
+	if (getMegapixels(Math.min(recommendedMaxWidth, maxWidth * 2)) > getMegapixels(fixedWidths[fixedWidths.length - 1]) + megapixelThreshold) {
+		fixedWidths.push(Math.min(recommendedMaxWidth, maxWidth * 2));
 	}
 
 	fixedWidths.forEach((width, index) => {
