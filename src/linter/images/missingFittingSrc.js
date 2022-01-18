@@ -5,7 +5,7 @@ import stripViewportQueries from '../../util/stripViewportQueries';
 import mediaMatchesViewport from '../../util/mediaMatchesViewport';
 
 const threshold = 0.5;
-const megapixelThreshold = 0.5;
+const megapixelThreshold = 0.2;
 const megapixelGap = 0.75;
 const recommendedMinWidth = 256;
 const recommendedMaxWidth = 2048;
@@ -175,7 +175,7 @@ function buildRecommendation(dimensions, size, viewportsCount) {
 
 function calculateSuggestedDimenions(dimensions, ratio, viewportsCount) {
 	const maxWidth = Math.min(recommendedMaxWidth, Math.round(Math.max(...Object.values(dimensions))));
-	const minWidth = Math.max(recommendedMinWidth, Math.round(Math.min(...Object.values(dimensions).filter(width => width > 0))));
+	const minWidth = Math.min(maxWidth, Math.max(recommendedMinWidth, Math.round(Math.min(...Object.values(dimensions).filter(width => width > 0)))));
 	const fixedWidths = [];
 	const widthCounts = {};
 
@@ -189,8 +189,8 @@ function calculateSuggestedDimenions(dimensions, ratio, viewportsCount) {
 		width = parseInt(width);
 		if (widthCounts[width] > viewportsCount / 8) {
 			[
-				Math.max(recommendedMinWidth, Math.min(recommendedMaxWidth, width)),
-				Math.max(recommendedMinWidth, Math.min(recommendedMaxWidth, width * 2)),
+				Math.min(recommendedMaxWidth, width),
+				Math.min(recommendedMaxWidth, width * 2),
 			].forEach(width => {
 				if (!fixedWidths.includes(width)) {
 					fixedWidths.push(width);
@@ -200,9 +200,11 @@ function calculateSuggestedDimenions(dimensions, ratio, viewportsCount) {
 	});
 
 	fixedWidths.sort((a, b) => a < b ? -1 : 1);
-	const allWidths = [];
 
 	if (!fixedWidths[0] || getMegapixels(minWidth) < getMegapixels(fixedWidths[0]) - megapixelThreshold) {
+		if (fixedWidths[0] && getMegapixels(minWidth) + megapixelThreshold < getMegapixels(fixedWidths[0])) {
+			fixedWidths.unshift(getWidth(getMegapixels(minWidth) + megapixelThreshold));
+		}
 		fixedWidths.unshift(minWidth);
 	}
 
@@ -214,23 +216,25 @@ function calculateSuggestedDimenions(dimensions, ratio, viewportsCount) {
 		fixedWidths.push(Math.min(recommendedMaxWidth, maxWidth * 2));
 	}
 
-	fixedWidths.forEach((width, index) => {
+	const allWidths = [];
+
+	fixedWidths.reverse().forEach((width, index) => {
 		const previousWidth = allWidths[allWidths.length - 1];
-		const gap = previousWidth && getMegapixels(width) - getMegapixels(previousWidth);
+		const gap = previousWidth && getMegapixels(previousWidth) - getMegapixels(width);
 		if (gap < megapixelThreshold) {
-			allWidths.pop();
+			return;
 		}
 		else if (gap > megapixelGap) {
 			const gapSize = gap / Math.ceil(gap / megapixelGap);
 			let nextWidth = previousWidth;
-			while (width - 10 > (nextWidth = getWidth(getMegapixels(nextWidth) + gapSize))) {
+			while (width + 10 < (nextWidth = getWidth(getMegapixels(nextWidth) - gapSize))) {
 				allWidths.push(nextWidth);
 			}
 		}
 		allWidths.push(width);
 	});
 
-	return allWidths;
+	return allWidths.reverse();
 
 	function getMegapixels(width) {
 		return width * width * ratio / 1000000;
