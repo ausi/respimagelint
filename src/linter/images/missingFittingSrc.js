@@ -81,14 +81,18 @@ export default function(image) {
 					? imageWidth / nearbyWidth
 					: nearbyWidth / imageWidth
 			);
+			const ratio = (image.images[srcs[0]].size.width ? image.images[srcs[0]].size.height / image.images[srcs[0]].size.width : 1) || 1;
 
-			if (distance > threshold) {
+			const megapixelDistance = Math.abs(((imageWidth * imageWidth * ratio) - (nearbyWidth * nearbyWidth * ratio)) / 1000000);
+
+			if (megapixelDistance > megapixelGap && (nearbyWidth < recommendedMaxWidth || imageWidth < recommendedMaxWidth)) {
 				errorItems[itemIndex] = errorItems[itemIndex] || {};
 				errorItems[itemIndex][viewport] = {
 					viewport,
 					imageWidth,
 					nearbyWidth,
 					distance: Math.round(distance * 100) + '%',
+					megapixelDistance: Math.round(megapixelDistance * 100) / 100 + '',
 				};
 			}
 
@@ -146,6 +150,7 @@ export default function(image) {
 			imageWidth: firstItem.imageWidth,
 			nearbyWidth: firstItem.nearbyWidth,
 			distance: firstItem.distance,
+			megapixelDistance: firstItem.megapixelDistance,
 			viewportRanges: viewportRanges.map(range => range[0] === range[1] ? range[0] : range.join('–')).join(', ').replace(/x/g, '×'),
 			recommendation: '<br>' + buildRecommendation(dimensionsBySource[itemIndex], image.images[imageSrc] ? image.images[imageSrc].size : {}, Object.keys(viewportWidths).length),
 			recommendationContext: image.data.img === item ? '<code>&lt;img srcset=&quot;…&quot;&gt;</code>' : 'the ' + humanReadableIndex(itemIndex) + ' <code>&lt;source srcset=&quot;…&quot;&gt;</code>',

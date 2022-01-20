@@ -28,6 +28,6 @@ Loading a large image and display it much smaller should be avoided to save band
 
 ## Error template
 
-At a viewport of {{viewport}} the image was displayed {{imageWidth}} pixels wide, but the closest provided image has a width of {{nearbyWidth}} which is {{distance}} off. The affected viewports are {{viewportRanges}}.
+At a viewport of {{viewport}} the image was displayed {{imageWidth}} pixels wide, but the closest provided image has a width of {{nearbyWidth}} which is {{distance}} ({{megapixelDistance}} megapixels) off. The affected viewports are {{viewportRanges}}.
 
 Try using the following image sizes in {{recommendationContext}} instead: {{recommendation}}
