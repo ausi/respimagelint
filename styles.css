@@ -285,6 +285,13 @@ pre[class*=language-] {
   font-size: 0.8em;
 }
 
+#view-settings {
+  vertical-align: middle;
+}
+#view-settings + label {
+  margin: 0 0 0 0.2em;
+}
+
 .report {
   max-width: 60em;
   margin: 0 auto;
@@ -300,6 +307,9 @@ pre[class*=language-] {
 }
 .report-item h2 {
   color: crimson;
+}
+#view-settings:checked ~ .report-item.-passed {
+  display: none;
 }
 .report-item.-passed h2 {
   color: seagreen;
