@@ -9,7 +9,7 @@ Loading a large image and display it much smaller should be avoided to save band
 <img
 	style="width: 100%"
 	src="200x100.jpg"
-	srcset="200x100.jpg 200w, 400x200.jpg 400w, 800x400.jpg 800w, 1600x800.jpg 1600w, 2000x1000.jpg 2000w"
+	srcset="200x100.jpg 200w, 400x200.jpg 400w, 800x400.jpg 800w, 1400x700.jpg 1400w, 1800x900.jpg 1800w, 2100x1050.jpg 2100w"
 	sizes="100vw"
 >
 ```

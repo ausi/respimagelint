@@ -60,15 +60,13 @@ export default function(image) {
 				return;
 			}
 
+			const ratio = ((image.images[srcs[0]] && image.images[srcs[0]].size.width) ? image.images[srcs[0]].size.height / image.images[srcs[0]].size.width : 1) || 1;
+
 			let nearbyWidth = srcs
 				.map(src => image.images[src].size.width)
 				.filter(Boolean)
 				.sort((a, b) => {
-					[a, b] = [a, b].map(width => 1 - (
-						imageWidth < width
-							? imageWidth / width
-							: width / imageWidth
-					));
+					[a, b] = [a, b].map(width => Math.abs(((imageWidth * imageWidth * ratio) - (width * width * ratio)) / 1000000));
 					return a - b;
 				})[0];
 
@@ -81,11 +79,10 @@ export default function(image) {
 					? imageWidth / nearbyWidth
 					: nearbyWidth / imageWidth
 			);
-			const ratio = (image.images[srcs[0]].size.width ? image.images[srcs[0]].size.height / image.images[srcs[0]].size.width : 1) || 1;
 
 			const megapixelDistance = Math.abs(((imageWidth * imageWidth * ratio) - (nearbyWidth * nearbyWidth * ratio)) / 1000000);
 
-			if (megapixelDistance > megapixelGap && (nearbyWidth < recommendedMaxWidth || imageWidth < recommendedMaxWidth)) {
+			if (megapixelDistance > megapixelGap / 2 && (nearbyWidth < recommendedMaxWidth || imageWidth < recommendedMaxWidth)) {
 				errorItems[itemIndex] = errorItems[itemIndex] || {};
 				errorItems[itemIndex][viewport] = {
 					viewport,
