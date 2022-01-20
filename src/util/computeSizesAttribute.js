@@ -5,7 +5,7 @@ export default function computeSizesAttribute(allDimensions, queriesBySize) {
 	const byViewport = {};
 
 	Object.keys(allDimensions).forEach(viewport => {
-		if (!byViewport[viewport.split('x')[0]]) {
+		if (!byViewport[viewport.split('x')[0]] && allDimensions[viewport]) {
 			byViewport[viewport.split('x')[0]] = allDimensions[viewport];
 		}
 	});
