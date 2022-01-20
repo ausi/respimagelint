@@ -26,6 +26,11 @@
 		margin: 1em 0
 		font-size: 0.8em
 
+#view-settings
+	vertical-align: middle
+	+ label
+		margin: 0 0 0 0.2em
+
 .report
 	max-width: 60em
 	margin: 0 auto
@@ -43,8 +48,12 @@
 		h2
 			color: $red
 
-		&.-passed h2
-			color: $green
+		&.-passed
+			#view-settings:checked ~ &
+				display: none
+
+			h2
+				color: $green
 
 		&-header
 			> img

@@ -16,19 +16,24 @@ export default function (data) {
 	link.href = link.textContent = data.href;
 	headline.appendChild(link);
 
-	const reports = data.data.map((image, index) => reportImage(image, index));
+	let viewSettings = document.createElement('input');
+	viewSettings.type = 'checkbox';
+	viewSettings.id = 'view-settings';
+	report.appendChild(viewSettings);
 
-	reports.forEach(imageReport => {
-		if (!imageReport.classList.contains('-passed')) {
-			report.appendChild(imageReport)
-		}
+	let viewSettingsLabel = document.createElement('label');
+	viewSettingsLabel.textContent = 'Only show failed checks';
+	viewSettingsLabel.setAttribute('for', 'view-settings');
+	report.appendChild(viewSettingsLabel);
+
+	data.data.map((image, index) => reportImage(image, index)).forEach(imageReport => {
+		report.appendChild(imageReport)
 	});
 
-	reports.forEach(imageReport => {
-		if (imageReport.classList.contains('-passed')) {
-			report.appendChild(imageReport)
-		}
-	});
+	let reportInfo = document.createElement('p');
+	reportInfo.textContent = report.querySelectorAll('.report-item.-passed').length + ' out of ' + report.querySelectorAll('.report-item').length + ' images passed all checks.';
+	report.insertBefore(reportInfo, viewSettings);
+
 
 	if (!data.data.length) {
 		let text = document.createElement('p');
