@@ -1,6 +1,6 @@
 import roundWidth from './roundWidth';
 
-export default function computeSrcsetWidths(dimensions, ratio, viewportsCount, {
+export default function computeSrcsetWidths(dimensions, ratio, viewportsCount, existingWidths, {
 	recommendedMinWidth = 0,
 	recommendedMaxWidth = 16384,
 	megapixelThreshold = 0.25,
@@ -31,12 +31,11 @@ export default function computeSrcsetWidths(dimensions, ratio, viewportsCount, {
 		}
 	});
 
+	fixedWidths.push(...existingWidths.filter(width => width >= minWidth && width <= maxWidth * 2));
+
 	fixedWidths.sort((a, b) => a < b ? -1 : 1);
 
 	if (!fixedWidths[0] || getMegapixels(minWidth) < getMegapixels(fixedWidths[0]) - megapixelThreshold) {
-		if (fixedWidths[0] && getMegapixels(minWidth) + megapixelThreshold < getMegapixels(fixedWidths[0])) {
-			fixedWidths.unshift(getWidth(getMegapixels(minWidth) + megapixelThreshold));
-		}
 		fixedWidths.unshift(roundWidth(minWidth));
 	}
 

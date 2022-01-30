@@ -140,7 +140,12 @@ export default function(image) {
 
 		viewportRanges = viewportRanges.filter(Boolean);
 
-		const imageSrc = item.srcset[0] ? item.srcset[0].src : item.src;
+		const srcPaths = [...(item.srcset || [])];
+		if (item.src && !srcPaths.includes(item.src)) {
+			srcPaths.push(item.src);
+		}
+
+		const srcSizes = srcPaths.filter(src => !!image.images[src]).map(src => image.images[src].size);
 
 		error(__filename, item, {
 			viewport: firstItem.viewport.replace(/x/g, '×'),
@@ -149,7 +154,7 @@ export default function(image) {
 			distance: firstItem.distance,
 			megapixelDistance: firstItem.megapixelDistance,
 			viewportRanges: viewportRanges.map(range => range[0] === range[1] ? range[0] : range.join('–')).join(', ').replace(/x/g, '×'),
-			recommendation: '<br>' + buildRecommendation(dimensionsBySource[itemIndex], image.images[imageSrc] ? image.images[imageSrc].size : {}, Object.keys(viewportWidths).length),
+			recommendation: '<br>' + buildRecommendation(dimensionsBySource[itemIndex], srcSizes, Object.keys(viewportWidths).length),
 			recommendationContext: image.data.img === item ? '<code>&lt;img srcset=&quot;…&quot;&gt;</code>' : 'the ' + humanReadableIndex(itemIndex) + ' <code>&lt;source srcset=&quot;…&quot;&gt;</code>',
 		});
 
@@ -170,9 +175,9 @@ function humanReadableIndex(index) {
 	return index + suffixes[ordinal];
 }
 
-function buildRecommendation(dimensions, size, viewportsCount) {
-	const ratio = (size.width && size.height) ? size.height / size.width : 1;
-	return computeSrcsetWidths(dimensions, ratio, viewportsCount, {
+function buildRecommendation(dimensions, sizes, viewportsCount) {
+	const ratio = (sizes[0] && sizes[0].width && sizes[0].height) ? sizes[0].height / sizes[0].width : 1;
+	return computeSrcsetWidths(dimensions, ratio, viewportsCount, sizes.map(size => size.width).filter(Boolean), {
 		recommendedMinWidth,
 		recommendedMaxWidth,
 		megapixelThreshold,
