@@ -1,3 +1,5 @@
+import roundWidth from './roundWidth';
+
 export default function computeSrcsetWidths(dimensions, ratio, viewportsCount, {
 	recommendedMinWidth = 0,
 	recommendedMaxWidth = 16384,
@@ -35,15 +37,15 @@ export default function computeSrcsetWidths(dimensions, ratio, viewportsCount, {
 		if (fixedWidths[0] && getMegapixels(minWidth) + megapixelThreshold < getMegapixels(fixedWidths[0])) {
 			fixedWidths.unshift(getWidth(getMegapixels(minWidth) + megapixelThreshold));
 		}
-		fixedWidths.unshift(minWidth);
+		fixedWidths.unshift(roundWidth(minWidth));
 	}
 
 	if (getMegapixels(maxWidth) > getMegapixels(fixedWidths[fixedWidths.length - 1]) + megapixelThreshold) {
-		fixedWidths.push(maxWidth);
+		fixedWidths.push(roundWidth(maxWidth));
 	}
 
 	if (getMegapixels(Math.min(recommendedMaxWidth, maxWidth * 2)) > getMegapixels(fixedWidths[fixedWidths.length - 1]) + megapixelThreshold) {
-		fixedWidths.push(Math.min(recommendedMaxWidth, maxWidth * 2));
+		fixedWidths.push(Math.min(recommendedMaxWidth, roundWidth(maxWidth * 2)));
 	}
 
 	const allWidths = [];
@@ -58,7 +60,7 @@ export default function computeSrcsetWidths(dimensions, ratio, viewportsCount, {
 			const gapSize = gap / Math.ceil(gap / megapixelGap);
 			let nextWidth = previousWidth;
 			while (width + 10 < (nextWidth = getWidth(getMegapixels(nextWidth) - gapSize))) {
-				allWidths.push(nextWidth);
+				allWidths.push(roundWidth(nextWidth));
 			}
 		}
 		allWidths.push(width);
