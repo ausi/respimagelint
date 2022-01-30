@@ -3,8 +3,8 @@ import allSources from '../../util/allSources';
 import mediaToStringArray from '../../util/mediaToStringArray';
 import stripViewportQueries from '../../util/stripViewportQueries';
 import mediaMatchesViewport from '../../util/mediaMatchesViewport';
+import computeSrcsetWidths from '../../util/computeSrcsetWidths';
 
-const threshold = 0.5;
 const megapixelThreshold = 0.2;
 const megapixelGap = 0.75;
 const recommendedMinWidth = 256;
@@ -172,77 +172,10 @@ function humanReadableIndex(index) {
 
 function buildRecommendation(dimensions, size, viewportsCount) {
 	const ratio = (size.width && size.height) ? size.height / size.width : 1;
-	return calculateSuggestedDimenions(dimensions, ratio, viewportsCount).map(width => width + '<small>×' + Math.round(width * ratio) + '</small>').join(', ');
-}
-
-function calculateSuggestedDimenions(dimensions, ratio, viewportsCount) {
-	const maxWidth = Math.min(recommendedMaxWidth, Math.round(Math.max(...Object.values(dimensions))));
-	const minWidth = Math.min(maxWidth, Math.max(recommendedMinWidth, Math.round(Math.min(...Object.values(dimensions).filter(width => width > 0)))));
-	const fixedWidths = [];
-	const widthCounts = {};
-
-	Object.values(dimensions).forEach(width => {
-		widthCounts[width] = widthCounts[width] || 0;
-		widthCounts[width]++;
-	});
-
-	// If the image size is fixed (not fluid) for some viewports, these exact dimensions (including retina versions) should be used
-	Object.keys(widthCounts).forEach(width => {
-		width = parseInt(width);
-		if (widthCounts[width] > viewportsCount / 8) {
-			[
-				Math.min(recommendedMaxWidth, width),
-				Math.min(recommendedMaxWidth, width * 2),
-			].forEach(width => {
-				if (!fixedWidths.includes(width)) {
-					fixedWidths.push(width);
-				}
-			});
-		}
-	});
-
-	fixedWidths.sort((a, b) => a < b ? -1 : 1);
-
-	if (!fixedWidths[0] || getMegapixels(minWidth) < getMegapixels(fixedWidths[0]) - megapixelThreshold) {
-		if (fixedWidths[0] && getMegapixels(minWidth) + megapixelThreshold < getMegapixels(fixedWidths[0])) {
-			fixedWidths.unshift(getWidth(getMegapixels(minWidth) + megapixelThreshold));
-		}
-		fixedWidths.unshift(minWidth);
-	}
-
-	if (getMegapixels(maxWidth) > getMegapixels(fixedWidths[fixedWidths.length - 1]) + megapixelThreshold) {
-		fixedWidths.push(maxWidth);
-	}
-
-	if (getMegapixels(Math.min(recommendedMaxWidth, maxWidth * 2)) > getMegapixels(fixedWidths[fixedWidths.length - 1]) + megapixelThreshold) {
-		fixedWidths.push(Math.min(recommendedMaxWidth, maxWidth * 2));
-	}
-
-	const allWidths = [];
-
-	fixedWidths.reverse().forEach((width, index) => {
-		const previousWidth = allWidths[allWidths.length - 1];
-		const gap = previousWidth && getMegapixels(previousWidth) - getMegapixels(width);
-		if (gap < megapixelThreshold) {
-			return;
-		}
-		else if (gap > megapixelGap) {
-			const gapSize = gap / Math.ceil(gap / megapixelGap);
-			let nextWidth = previousWidth;
-			while (width + 10 < (nextWidth = getWidth(getMegapixels(nextWidth) - gapSize))) {
-				allWidths.push(nextWidth);
-			}
-		}
-		allWidths.push(width);
-	});
-
-	return allWidths.reverse();
-
-	function getMegapixels(width) {
-		return width * width * ratio / 1000000;
-	}
-
-	function getWidth(megapixels) {
-		return Math.round(Math.sqrt(megapixels * 1000000 / ratio));
-	}
+	return computeSrcsetWidths(dimensions, ratio, viewportsCount, {
+		recommendedMinWidth,
+		recommendedMaxWidth,
+		megapixelThreshold,
+		megapixelGap,
+	}).map(width => width + '<small>×' + Math.round(width * ratio) + '</small>').join(', ');
 }

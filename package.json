@@ -6,8 +6,9 @@
   "devDependencies": {
     "autoprefixer": "^6.1.2",
     "babel-eslint": "^6.0.4",
+    "babel-jest": "^23.6.0",
     "babel-polyfill": "^6.2.0",
-    "babel-preset-es2015": "^6.1.18",
+    "babel-preset-env": "^1.7.0",
     "babelify": "^7.2.0",
     "brfs": "^1.4.0",
     "browserify": "^13.0.1",
@@ -23,6 +24,7 @@
     "gulp-replace": "^0.5.4",
     "gulp-sass": "^5.1.0",
     "gulp-util": "^3.0.6",
+    "jest": "^27.4.7",
     "lodash": "^4.17.19",
     "marked": "^4.0.10",
     "phantomjs-prebuilt": "^2.1.7",
@@ -36,7 +38,7 @@
     "whatwg-fetch": "^1.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest && gulp test"
   },
   "author": "",
   "license": "ISC"
