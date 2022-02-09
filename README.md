@@ -16,7 +16,19 @@ Go to [ausi.github.io/respimagelint](https://ausi.github.io/respimagelint/), add
 ## Contribute
 
 * Create a [new issue on GitHub](https://github.com/ausi/respimagelint/issues/new) if you have a question, a suggestion or found a bug.
-* Talk about it on IRC: Join `#respimagelint` on Freenode or [connect with the browser](https://webchat.freenode.net?randomnick=1&channels=%23respimagelint&prompt=1).
+
+## Sponsors
+
+Thanks to all sponsors that help to bring this project forward. You can [become a sponsor now](https://github.com/sponsors/ausi) too.
+
+* [TinyBit](https://tinybit.com/) sponsored features
+  [#62](https://github.com/ausi/respimagelint/issues/62),
+  [#63](https://github.com/ausi/respimagelint/issues/63), 
+  [#68](https://github.com/ausi/respimagelint/issues/68),
+  [#67](https://github.com/ausi/respimagelint/issues/67),
+  the [unit test suite](https://github.com/ausi/respimagelint/compare/e94115e3e2edae21a76583a41bc0bbee76aeaf2e...9d1c6d8ceb9eca396c50abf21d47aa5420e16bce)
+  and more
+* [My sponsors on GitHub](https://github.com/sponsors/ausi)
 
 ## License
 
