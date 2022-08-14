@@ -27,7 +27,7 @@ export default function(length, viewport) {
 		return Math.round(parseFloat(length));
 	}
 
-	if (length.match(/^\d*\.?\d+em$/)) {
+	if (length.match(/^\d*\.?\d+r?em$/)) {
 		return Math.round(parseFloat(length) * 16);
 	}
 
