@@ -6,6 +6,12 @@ RespImageLint is a bookmarklet that checks images of a webpage against a list of
 
 Go to [ausi.github.io/respimagelint](https://ausi.github.io/respimagelint/), add the bookmarklet to your browser toolbar and run it on your website.
 
+If the bookmarklet doesn’t work for you
+because of security restrictions of your browser
+there is a Chrome extension available 
+created by [Peter Neumann](https://github.com/peter-neumann-dev): \
+<https://github.com/peter-neumann-dev/responsive-image-linter>
+
 ## Browser Support
 
 * Firefox 45+
