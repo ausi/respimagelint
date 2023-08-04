@@ -219,7 +219,7 @@ function stepDownResize(image, targetSize) {
 function createCanvasCtx(size) {
 	const canvas = document.createElement('canvas');
 	canvas.width = canvas.height = size;
-	return canvas.getContext('2d');
+	return canvas.getContext('2d', {willReadFrequently: true});
 }
 
 function loadImageAsBlob(url) {
