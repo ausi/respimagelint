@@ -14,6 +14,7 @@ export default function (data) {
 
 	let link = document.createElement('a');
 	link.href = link.textContent = data.href;
+	link.target = '_top';
 	headline.appendChild(link);
 
 	let viewSettings = document.createElement('input');

@@ -162,6 +162,13 @@ export default function (document, includeDom = false) {
 			});
 		}
 
+		document.body.removeChild(iframe);
+		document.body.removeChild(progressBar);
+		document.body.removeChild(progressMessage);
+		document.body.removeChild(overlay);
+		setStyles(document.body, {overflow: ''});
+		setStyles(document.documentElement, {overflow: ''});
+
 		return data;
 
 	});

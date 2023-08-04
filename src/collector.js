@@ -1,8 +1,10 @@
 import 'whatwg-fetch';
 import collector from './collector/index';
+import setStyles from './util/setStyles';
 
 const script = document.getElementById('respimagelint-script');
 const scriptBase = script ? script.src.split('?')[0].replace(/[^/]+$/, '') : 'https://ausi.github.io/respimagelint/';
+let iframe;
 
 collector(document).then(data => {
 
@@ -19,14 +21,34 @@ collector(document).then(data => {
 			}
 		});
 
-		let store = document.createElement('iframe');
-		store.src = scriptBase + 'store.html';
-		document.body.appendChild(store);
+		setStyles(document.body, {overflow: 'hidden'});
+		setStyles(document.documentElement, {overflow: 'hidden'});
 
+		iframe = document.createElement('iframe');
+		setStyles(iframe, {
+			position: 'fixed',
+			top: '5vh',
+			left: '5vw',
+			'z-index': 2147483647,
+			width: '90vw',
+			'max-width': 'none',
+			'min-width': 0,
+			height: '90vh',
+			'max-height': 'none',
+			'min-height': 0,
+			border: 0,
+			'border-radius': '10px',
+			background: '#fff',
+			'box-shadow': '0 25px 50px rgba(0, 0, 0, 0.6)',
+			'overscroll-behavior': 'contain',
+		});
+
+		iframe.src = scriptBase + 'store.html';
+		document.body.appendChild(iframe);
 	});
 
 }).then(() => {
-	document.location.href = scriptBase + 'linter.html';
+	iframe.src = scriptBase + 'linter.html';
 }).catch(err => {
 	alert(err);
 	document.location.reload();
