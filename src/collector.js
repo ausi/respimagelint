@@ -2,7 +2,7 @@ import 'whatwg-fetch';
 import collector from './collector/index';
 
 const script = document.getElementById('respimagelint-script');
-const scriptBase = script.src.split('?')[0].replace(/[^/]+$/, '');
+const scriptBase = script ? script.src.split('?')[0].replace(/[^/]+$/, '') : 'https://ausi.github.io/respimagelint/';
 
 collector(document).then(data => {
 
