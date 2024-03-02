@@ -55,7 +55,9 @@ export default function computeSizesAttribute(allDimensions, queriesBySize) {
 	});
 
 	// Add last range
-	ranges.push(currentRange);
+	if (currentRange) {
+		ranges.push(currentRange);
+	}
 
 	// Start with the biggest viewport
 	ranges.reverse();
