@@ -46,7 +46,12 @@ export default function(image, mediaQueries) {
 			}
 
 			let sizeMatched = false;
-			item.sizes.forEach(({size, media}) => {
+			item.sizes.forEach(({size, media}, index) => {
+
+				// If the first item is set to auto, ignore it
+				if (index === 0 && !media && size === 'auto') {
+					return;
+				}
 
 				if (sizeMatched) {
 					return;

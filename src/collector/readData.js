@@ -9,6 +9,7 @@ export default function readData(image) {
 			src: img.getAttribute('src'),
 			srcset: parseSrcset(img.getAttribute('srcset')),
 			sizes: parseSizes(img.getAttribute('sizes')),
+			loading: img.getAttribute('loading') || undefined,
 		},
 		sources: image.dom.sources.map(source => {
 			return {
