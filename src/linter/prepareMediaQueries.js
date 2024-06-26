@@ -6,7 +6,11 @@ export default function prepareMediaQueries(data) {
 	const queriesBySize = {};
 
 	data.mediaQueries.forEach(queryString => {
-		(parseMedia(queryString) || []).forEach(query => {
+		const parsedQueries = parseMedia(queryString);
+		if (!Array.isArray(parsedQueries)) {
+			return;
+		}
+		parsedQueries.forEach(query => {
 			(query.expressions || []).forEach(({feature, modifier, value}) => {
 				let size = computeLength(value);
 				if (feature !== 'width' || !size || (modifier !== 'min' && modifier !== 'max')) {
