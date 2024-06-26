@@ -1,4 +1,5 @@
 import parseMedia from '../util/parseMedia';
+import splitCommaSeparatedListOfComponentValues from '../util/splitCommaSeparatedListOfComponentValues';
 
 export default function readData(image) {
 
@@ -45,10 +46,9 @@ function parseSizes(attribute) {
 	if (!attribute) {
 		return [];
 	}
-	return attribute.split(',').map(size => {
-		size = size.trim();
+	return splitCommaSeparatedListOfComponentValues(attribute).map(size => {
 		let media;
-		size = size.replace(/^\(.+?\)\s+/, match => {
+		size = size.trim().replace(/^(?:not\s+)?\(.+?\)(?:\s*(?:and|or)\s*\(.+?\))*\s+/, match => {
 			media = parseMedia(match.trim());
 			return '';
 		});

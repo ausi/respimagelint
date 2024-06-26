@@ -2,6 +2,7 @@ import { marked } from 'marked';
 import prism from 'prismjs';
 import getDocs from './util/getDocs';
 import allSources from './util/allSources';
+import splitCommaSeparatedListOfComponentValues from './util/splitCommaSeparatedListOfComponentValues';
 
 export default function (data) {
 
@@ -126,7 +127,11 @@ function buildMarkup(markup, indentation = '', maxlength = 95) {
 				&& value.indexOf(',') !== -1
 				&& name.length + value.length + indentation.length * 4 + 7 > maxlength
 			) {
-				value = '\n' + indentation + '\t\t' + value.trim().replace(/,\s+/g, ',\n' + indentation + '\t\t') + '\n' + indentation + '\t';
+				if (name === 'sizes') {
+					value = '\n' + indentation + '\t\t' + splitCommaSeparatedListOfComponentValues(value.trim()).join(',\n' + indentation + '\t\t') + '\n' + indentation + '\t';
+				} else {
+					value = '\n' + indentation + '\t\t' + value.trim().replace(/,\s+/g, ',\n' + indentation + '\t\t') + '\n' + indentation + '\t';
+				}
 			}
 			return name + '="' + value + '"';
 		});

@@ -13,10 +13,10 @@ export default function(length, viewport) {
 	}
 
 	length = length.replace(
-		/\d*\.?\d+v(w|h|min|max)/gi,
+		/\d*\.?\d+[sld]?v(w|h|i|b|min|max)/gi,
 		(match, unit) => parseFloat(match) * (
-			unit === 'w' ? viewport[0] :
-			unit === 'h' ? viewport[1] :
+			unit === 'w' || unit === 'i' ? viewport[0] :
+			unit === 'h' || unit === 'b' ? viewport[1] :
 			unit === 'min' ? Math.min(viewport[0], viewport[1]) :
 			unit === 'max' ? Math.max(viewport[0], viewport[1]) :
 			0
