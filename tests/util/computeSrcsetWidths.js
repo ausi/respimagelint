@@ -9,7 +9,7 @@ var config = {
 };
 
 test('Basic srcset with single viewport', () => {
-	expect(computeSrcsetWidths({'800x600': 400}, 1, 1, [])).toStrictEqual([400, 800]);
+	expect(computeSrcsetWidths({'800x600': 400}, 1, 1, [])).toStrictEqual([400, 800, 1020, 1200]);
 });
 
 test('Fluid 100vw square image', () => {
@@ -32,6 +32,27 @@ test('Fluid 100vw square image with existing widths', () => {
 	const widths = computeSrcsetWidths(dimensions, 1, Object.keys(dimensions).length, [10, 1200, 1999, 9999], config);
 
 	expect(widths).toStrictEqual([300, 880, 1200, 1440, 1650, 1830, 1999]);
+});
+
+test('Fluid 100vw square image with common devices', () => {
+	const dimensions = {};
+	for (let viewport = 300; viewport < 3000; viewport+=10) {
+		dimensions[viewport+'x'+viewport] = viewport;
+	}
+
+	const widths = computeSrcsetWidths(dimensions, 1, Object.keys(dimensions).length, [], {
+		megapixelThreshold: config.megapixelThreshold,
+		megapixelGap: config.megapixelGap,
+		recommendedMinWidth: config.recommendedMinWidth,
+		recommendedMaxWidth: config.recommendedMaxWidth,
+		commonDevices: [
+			{ width: 412, dpr: 1.75 },
+			{ width: 360, dpr: 3 },
+			{ width: 1920, dpr: 1 },
+		],
+	});
+
+	expect(widths).toStrictEqual([300, 721, 1080, 1340, 1560, 1750, 1920, 2048]);
 });
 
 test('Fluid 50vw square image', () => {
@@ -75,7 +96,18 @@ test('Fluid 100vw square image max-width 600', () => {
 
 	const widths = computeSrcsetWidths(dimensions, 1, Object.keys(dimensions).length, [], config);
 
-	expect(widths).toStrictEqual([300, 600, 950, 1200]);
+	expect(widths).toStrictEqual([300, 600, 950, 1200, 1430, 1630, 1800]);
+});
+
+test('Static 500 square image', () => {
+	const dimensions = {};
+	for (let viewport = 300; viewport < 3000; viewport+=10) {
+		dimensions[viewport+'x'+viewport] = 500;
+	}
+
+	const widths = computeSrcsetWidths(dimensions, 1, Object.keys(dimensions).length, [], config);
+
+	expect(widths).toStrictEqual([500, 1000, 1280, 1500]);
 });
 
 test('Static 500/1000/1500 square image', () => {

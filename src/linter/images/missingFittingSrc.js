@@ -9,6 +9,14 @@ const megapixelThreshold = 0.2;
 const megapixelGap = 0.75;
 const recommendedMinWidth = 256;
 const recommendedMaxWidth = 2048;
+const commonDevices = [
+	// Google Lighthouse, see https://github.com/GoogleChrome/lighthouse/blob/b64b3534542c9dcaabb33d40b84ed7c93eefbd7d/core/config/constants.js#L16-L20
+	{ width: 412, dpr: 1.75 },
+	// Many different smartphones with a device resolution of 1080x…
+	{ width: 360, dpr: 3 },
+	// Most popular desktop @1x screen size
+	{ width: 1920, dpr: 1 },
+];
 
 export default function(image) {
 
@@ -140,12 +148,14 @@ export default function(image) {
 
 		viewportRanges = viewportRanges.filter(Boolean);
 
-		const srcPaths = [...(item.srcset || [])];
+		const srcPaths = [...(item.srcset || []).map(({ src }) => src)];
 		if (item.src && !srcPaths.includes(item.src)) {
 			srcPaths.push(item.src);
 		}
 
 		const srcSizes = srcPaths.filter(src => !!image.images[src]).map(src => image.images[src].size);
+		const recommendationWithExisting = buildRecommendation(dimensionsBySource[itemIndex], srcSizes, Object.keys(viewportWidths).length, true);
+		const recommendationWithoutExisting = buildRecommendation(dimensionsBySource[itemIndex], srcSizes, Object.keys(viewportWidths).length, false);
 
 		error(__filename, item, {
 			viewport: firstItem.viewport.replace(/x/g, '×'),
@@ -154,7 +164,7 @@ export default function(image) {
 			distance: firstItem.distance,
 			megapixelDistance: firstItem.megapixelDistance,
 			viewportRanges: viewportRanges.map(range => range[0] === range[1] ? range[0] : range.join('–')).join(', ').replace(/x/g, '×'),
-			recommendation: '<br>' + buildRecommendation(dimensionsBySource[itemIndex], srcSizes, Object.keys(viewportWidths).length),
+			recommendation: '<br>' + recommendationWithExisting + (recommendationWithExisting !== recommendationWithoutExisting ? '<br>Or alternatively, disregarding existing image files, the following:<br>' + recommendationWithoutExisting : ''),
 			recommendationContext: image.data.img === item ? '<code>&lt;img srcset=&quot;…&quot;&gt;</code>' : 'the ' + humanReadableIndex(itemIndex) + ' <code>&lt;source srcset=&quot;…&quot;&gt;</code>',
 		});
 
@@ -175,12 +185,13 @@ function humanReadableIndex(index) {
 	return index + suffixes[ordinal];
 }
 
-function buildRecommendation(dimensions, sizes, viewportsCount) {
+function buildRecommendation(dimensions, sizes, viewportsCount, includeExisting) {
 	const ratio = (sizes[0] && sizes[0].width && sizes[0].height) ? sizes[0].height / sizes[0].width : 1;
-	return computeSrcsetWidths(dimensions, ratio, viewportsCount, sizes.map(size => size.width).filter(Boolean), {
+	return computeSrcsetWidths(dimensions, ratio, viewportsCount, includeExisting ? sizes.map(size => size.width).filter(Boolean) : [], {
 		recommendedMinWidth,
 		recommendedMaxWidth,
 		megapixelThreshold,
 		megapixelGap,
+		commonDevices,
 	}).map(width => width + '<small>×' + Math.round(width * ratio) + '</small>').join(', ');
 }
