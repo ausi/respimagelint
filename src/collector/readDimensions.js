@@ -164,8 +164,25 @@ function addDimension(image, viewport) {
 }
 
 function imageWidth(img) {
+	if (!img.clientWidth) {
+		return 0;
+	}
+
+	if (!img.naturalWidth || !img.naturalHeight) {
+		return img.width;
+	}
+
+	const width = img.width;
+	const height = img.height;
 	const style = getComputedStyle(img);
-	return img.clientWidth
-		- parseFloat(style.paddingLeft)
-		- parseFloat(style.paddingRight);
+	const ratio = img.naturalWidth / img.naturalHeight;
+
+	if (
+		(['contain', 'scale-down'].includes(style.objectFit) && height * ratio < width)
+		|| (style.objectFit === 'cover' && height * ratio > width)
+	) {
+		return Math.round(height * ratio);
+	}
+
+	return width;
 }
